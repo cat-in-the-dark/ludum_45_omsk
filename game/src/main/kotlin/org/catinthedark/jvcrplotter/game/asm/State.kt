@@ -11,7 +11,8 @@ data class State(
         FLAG to 0
     ),
     var programCounter: Int = 0, // address of the current instruction
-    val instructions: List<Operation> = listOf()
+    val instructions: List<Operation> = listOf(),
+    var intCode: Int = 0
 ) {
     fun get(address: Int): Int {
         return registers[address] ?: throw  Exception("Wrong register address $address")

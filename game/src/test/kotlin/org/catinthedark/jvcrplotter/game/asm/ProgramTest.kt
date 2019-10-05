@@ -16,8 +16,8 @@ class ProgramTest {
                 AddOp(ValueRegister(X), ValueRegister(Y))      // add x y; 15
             )
         )
-        val interpreter = Interpreter(state)
-        while (interpreter.step()) {
+        val interpreter = Interpreter()
+        while (interpreter.step(state)) {
             state.print()
         }
 
@@ -36,8 +36,8 @@ class ProgramTest {
                 MovOp(ValueRegister(Y), ValueLiteral(42))
             )
         )
-        val interpreter = Interpreter(state)
-        while (interpreter.step()) {
+        val interpreter = Interpreter()
+        while (interpreter.step(state)) {
             state.print()
         }
 
@@ -60,8 +60,8 @@ class ProgramTest {
                 JgOp(ValueLiteral(-4))
             )
         )
-        val interpreter = Interpreter(state)
-        while (interpreter.step()) {
+        val interpreter = Interpreter()
+        while (interpreter.step(state)) {
             state.print()
         }
 

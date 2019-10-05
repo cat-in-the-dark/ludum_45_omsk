@@ -1,15 +1,13 @@
 package org.catinthedark.jvcrplotter.game.asm.ops
 
 import org.catinthedark.jvcrplotter.game.asm.Operation
-import org.catinthedark.jvcrplotter.game.asm.PeripheralPort
 import org.catinthedark.jvcrplotter.game.asm.State
 import org.catinthedark.jvcrplotter.game.asm.Value
 
 class IntOp(
-    private val op1: Value,
-    private val port: PeripheralPort
+    private val op1: Value
 ) : Operation {
     override fun apply(state: State) {
-        port.intNum = op1.get(state)
+        state.intCode = op1.get(state)
     }
 }
