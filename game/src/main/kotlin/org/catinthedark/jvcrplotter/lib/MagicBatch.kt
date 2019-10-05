@@ -1,4 +1,4 @@
-package org.catinthedark.itsadeal.lib
+package org.catinthedark.jvcrplotter.lib
 
 import com.badlogic.gdx.graphics.g2d.Batch
 

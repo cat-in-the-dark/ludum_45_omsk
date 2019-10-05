@@ -1,7 +1,7 @@
-package org.catinthedark.itsadeal.lib.states
+package org.catinthedark.jvcrplotter.lib.states
 
-import org.catinthedark.itsadeal.lib.IOC
-import org.catinthedark.itsadeal.lib.atOr
+import org.catinthedark.jvcrplotter.lib.IOC
+import org.catinthedark.jvcrplotter.lib.atOr
 import org.slf4j.LoggerFactory
 
 class StateMachine {

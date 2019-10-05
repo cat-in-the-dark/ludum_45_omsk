@@ -1,4 +1,4 @@
-package org.catinthedark.itsadeal.lib
+package org.catinthedark.jvcrplotter.lib
 
 class TimeCache<out T>(
     private val func: () -> T,

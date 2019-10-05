@@ -1,4 +1,4 @@
-package org.catinthedark.itsadeal.game
+package org.catinthedark.jvcrplotter.game
 
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.audio.Music

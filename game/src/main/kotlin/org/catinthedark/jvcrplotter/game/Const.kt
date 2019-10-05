@@ -1,8 +1,4 @@
-package org.catinthedark.itsadeal.game
-
-import org.catinthedark.itsadeal.game.texts.Texts
-import org.catinthedark.itsadeal.lib.IOC
-import kotlin.math.max
+package org.catinthedark.jvcrplotter.game
 
 object Const {
     object Screen {

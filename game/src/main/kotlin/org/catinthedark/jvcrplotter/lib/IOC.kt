@@ -1,4 +1,4 @@
-package org.catinthedark.itsadeal.lib
+package org.catinthedark.jvcrplotter.lib
 
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KProperty

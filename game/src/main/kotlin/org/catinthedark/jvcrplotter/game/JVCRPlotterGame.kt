@@ -1,4 +1,4 @@
-package org.catinthedark.itsadeal.game
+package org.catinthedark.jvcrplotter.game
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
@@ -8,13 +8,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.FitViewport
-import org.catinthedark.itsadeal.game.states.*
-import org.catinthedark.itsadeal.game.testing.Autopilot
-import org.catinthedark.itsadeal.lib.Deffer
-import org.catinthedark.itsadeal.lib.DefferImpl
-import org.catinthedark.itsadeal.lib.IOC
-import org.catinthedark.itsadeal.lib.atOrFail
-import org.catinthedark.itsadeal.lib.states.StateMachine
+import org.catinthedark.jvcrplotter.game.states.SplashScreenState
+import org.catinthedark.jvcrplotter.game.states.TitleScreenState
+import org.catinthedark.jvcrplotter.lib.Deffer
+import org.catinthedark.jvcrplotter.lib.DefferImpl
+import org.catinthedark.jvcrplotter.lib.IOC
+import org.catinthedark.jvcrplotter.lib.states.StateMachine
 
 class JVCRPlotter : Game() {
     private val stage: Stage by lazy {
@@ -39,39 +38,14 @@ class JVCRPlotter : Game() {
         StateMachine().apply {
             putAll(
                 States.SPLASH_SCREEN to SplashScreenState(),
-                States.TITLE_SCREEN to TitleScreenState(),
-                States.STORY to StoryState(),
-                States.NEW_GAME to StartNewGameState(),
-                States.EMPTY_ROOM to EmptyRoomState(),
-                States.WITH_MAN to WithManState(),
-                States.WITH_MAN_QUESTION to WithManQuestionState(),
-                States.WITH_MAN_ANSWER to WithManAnswerState(),
-                States.DOCUMENT_REVIEW to DocumentReviewState(),
-                States.FAIL to FailState(),
-                States.PROFIT to ProfitState(),
-                States.SKIP to SkipState(),
-                States.BANKROT to BankrotState()
+                States.TITLE_SCREEN to TitleScreenState()
             )
-            putMixin(States.EMPTY_ROOM, emptyRoomTutor)
-            putMixin(States.WITH_MAN, withManTutor)
             putMixins(
-                States.TITLE_SCREEN,
-                States.NEW_GAME,
-                States.EMPTY_ROOM,
-                States.WITH_MAN,
-                States.WITH_MAN_QUESTION,
-                States.WITH_MAN_ANSWER,
-                States.DOCUMENT_REVIEW,
-                States.FAIL,
-                States.PROFIT,
-                States.SKIP,
-                States.BANKROT
+                States.TITLE_SCREEN
             ) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                     IOC.put("state", States.TITLE_SCREEN)
                 }
-                IOC.atOrFail<InputAdapterHolder>("inputs").update()
-                IOC.atOrFail<Autopilot>("autopilot").update()
             }
         }
     }
@@ -80,10 +54,6 @@ class JVCRPlotter : Game() {
         IOC.put("deffer", DefferImpl())
         IOC.put("stage", stage)
         IOC.put("hud", hud)
-        val inputs = InputAdapterHolder(stage)
-        Gdx.input.inputProcessor = inputs
-        IOC.put("inputs", inputs)
-        IOC.put("autopilot", Autopilot())
         IOC.put("state", States.SPLASH_SCREEN)
     }
 

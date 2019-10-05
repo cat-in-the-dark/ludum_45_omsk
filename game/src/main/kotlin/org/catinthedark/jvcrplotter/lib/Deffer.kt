@@ -1,4 +1,4 @@
-package org.catinthedark.itsadeal.lib
+package org.catinthedark.jvcrplotter.lib
 
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap

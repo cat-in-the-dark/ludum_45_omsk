@@ -1,9 +1,7 @@
-package org.catinthedark.itsadeal.game
+package org.catinthedark.jvcrplotter.game
 
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
-import com.badlogic.gdx.audio.Music
-import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -22,7 +20,6 @@ object Assets {
     fun load(): AssetManager {
         return AssetManager().apply {
             Names.textures.forEach { load(it, Texture::class.java) }
-            Names.Sounds.all.forEach { load(it, Sound::class.java) }
 
             val resolver = InternalFileHandleResolver()
             setLoader(FreeTypeFontGenerator::class.java, FreeTypeFontGeneratorLoader(resolver))
@@ -103,12 +100,8 @@ object Assets {
 
         val textures = listOf(
             LOGO,
-            TITLE,
+            TITLE
         )
-
-        object Sounds {
-            val all = listOf()
-        }
     }
 }
 
