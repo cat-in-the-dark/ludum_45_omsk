@@ -85,6 +85,14 @@ object Assets {
                     fontParameters.color = Color.WHITE
                     fontFileName = "fonts/cyrfont.ttf"
                 })
+            load(Names.FONT_MEDIUM_MONOSPACE_BLACK,
+                BitmapFont::class.java,
+                FreetypeFontLoader.FreeTypeFontLoaderParameter().apply {
+                    fontParameters.size = 24
+                    fontParameters.characters = RUSSIAN_CHARACTERS
+                    fontParameters.color = Color.BLACK
+                    fontFileName = "fonts/SourceCodePro-Medium.ttf"
+                })
         }
     }
 
@@ -97,6 +105,8 @@ object Assets {
         val FONT_MEDIUM_BLACK = "font_medium_black.ttf"
         val FONT_MEDIUM_WHITE = "font_medium_white.ttf"
         val FONT_BIG_SERIF = "font_big_serif.ttf"
+        val FONT_MEDIUM_MONOSPACE_BLACK = "font_medium_monospace_black.ttf"
+
         val LOGO = "textures/title.png"
         val TITLE = "textures/title.png"
         val MONIK = "textures/monik.png"

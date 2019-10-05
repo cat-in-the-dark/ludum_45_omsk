@@ -27,17 +27,40 @@ class CodeEditorState : IState {
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
     private val inputProcessor = Gdx.input.inputProcessor
 
-    private val mulButton = CompositeButton(640, 180, Assets.Names.BUTTON, "MUL", {
-        editor.setSymbolUnderCursor("MUL")
-        editor.moveCursorRight()
-    })
-
-    private val addButton = CompositeButton(730, 180, Assets.Names.BUTTON, "ADD", {
-        editor.setSymbolUnderCursor("ADD")
-        editor.moveCursorRight()
-    })
-
-    private val buttons = listOf(mulButton, addButton)
+    private val buttons = listOf(
+        CompositeButton(640, 220, Assets.Names.BUTTON, "MUL", {
+            editor.setSymbolUnderCursor("MUL")
+            editor.moveCursorRight()
+        }),
+        CompositeButton(730, 220, Assets.Names.BUTTON, "ADD", {
+            editor.setSymbolUnderCursor("ADD")
+            editor.moveCursorRight()
+        }),
+        CompositeButton(820, 220, Assets.Names.BUTTON, "CMP", {
+            editor.setSymbolUnderCursor("CMP")
+            editor.moveCursorRight()
+        }),
+        CompositeButton(910, 220, Assets.Names.BUTTON, "INT", {
+            editor.setSymbolUnderCursor("INT")
+            editor.moveCursorRight()
+        }),
+        CompositeButton(1000, 220, Assets.Names.BUTTON, "JE", {
+            editor.setSymbolUnderCursor("JE")
+            editor.moveCursorRight()
+        }),
+        CompositeButton(640, 160, Assets.Names.BUTTON, "JG", {
+            editor.setSymbolUnderCursor("JG")
+            editor.moveCursorRight()
+        }),
+        CompositeButton(730, 160, Assets.Names.BUTTON, "X", {
+            editor.setSymbolUnderCursor("X")
+            editor.moveCursorRight()
+        }),
+        CompositeButton(820, 160, Assets.Names.BUTTON, "Y", {
+            editor.setSymbolUnderCursor("Y")
+            editor.moveCursorRight()
+        })
+    )
 
     override fun onActivate() {
         logger.info("game state activated")
@@ -53,7 +76,7 @@ class CodeEditorState : IState {
         }
 
         override fun keyTyped(character: Char): Boolean {
-            if (character in '0'..'9') {
+            if (character in '0'..'9' || (character == '-' && editor.getSymbolUnderCursor().isEmpty())) {
                 editor.setSymbolUnderCursor(editor.getSymbolUnderCursor() + character)
             }
             return inputProcessor.keyTyped(character)
@@ -89,8 +112,10 @@ class CodeEditorState : IState {
             val initY = Const.Screen.HEIGHT.toFloat() - 80f
             var yPos = initY
             val lineHeight = 30f
-            editor.getRows().forEach {
-                am.font(FONT_BIG).draw(b, it.joinToString(" "), initX, yPos)
+            editor.getRows().forEach { row ->
+                am.font(FONT_BIG).draw(b, row.joinToString("", transform = {
+                    it.padStart(4, ' ')
+                }), initX, yPos)
                 yPos -= lineHeight
             }
         }

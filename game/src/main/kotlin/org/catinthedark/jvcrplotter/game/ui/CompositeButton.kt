@@ -22,7 +22,7 @@ class CompositeButton(
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
     private val texture: Texture by lazy { am.at<Texture>(textureName) }
     private val button: Button by lazy { Button(x, y, x + texture.width, y + texture.height, onClick, onHover) }
-    private val fontName = Assets.Names.FONT_SMALL_BLACK
+    private val fontName = Assets.Names.FONT_MEDIUM_MONOSPACE_BLACK
     private val textLayout: GlyphLayout by lazy { GlyphLayout(am.at<BitmapFont>(fontName), label) }
 
     fun update() {
