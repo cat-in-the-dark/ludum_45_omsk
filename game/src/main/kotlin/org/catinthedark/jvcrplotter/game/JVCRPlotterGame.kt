@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.FitViewport
+import org.catinthedark.jvcrplotter.game.states.CodeEditorState
 import org.catinthedark.jvcrplotter.game.states.SplashScreenState
+import org.catinthedark.jvcrplotter.game.states.StartNewGameState
 import org.catinthedark.jvcrplotter.game.states.TitleScreenState
 import org.catinthedark.jvcrplotter.lib.Deffer
 import org.catinthedark.jvcrplotter.lib.DefferImpl
@@ -38,7 +40,9 @@ class JVCRPlotter : Game() {
         StateMachine().apply {
             putAll(
                 States.SPLASH_SCREEN to SplashScreenState(),
-                States.TITLE_SCREEN to TitleScreenState()
+                States.TITLE_SCREEN to TitleScreenState(),
+                States.CODE_EDITOR_SCREEN to CodeEditorState(),
+                States.START_NEW_GAME_STATE to StartNewGameState()
             )
             putMixins(
                 States.TITLE_SCREEN
