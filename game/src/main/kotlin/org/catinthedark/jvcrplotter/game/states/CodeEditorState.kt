@@ -7,12 +7,10 @@ import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
-import org.catinthedark.jvcrplotter.game.Assets
+import org.catinthedark.jvcrplotter.game.*
 import org.catinthedark.jvcrplotter.game.Assets.Names.FONT_BIG
-import org.catinthedark.jvcrplotter.game.Const
-import org.catinthedark.jvcrplotter.game.at
 import org.catinthedark.jvcrplotter.game.editor.Editor
-import org.catinthedark.jvcrplotter.game.font
+import org.catinthedark.jvcrplotter.game.ui.Button
 import org.catinthedark.jvcrplotter.game.ui.CompositeButton
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.atOrFail
@@ -26,6 +24,11 @@ class CodeEditorState : IState {
     private val editor: Editor by lazy { IOC.atOrFail<Editor>("editor") }
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
     private val inputProcessor = Gdx.input.inputProcessor
+
+    private val compileButton = Button(1190, 585, 1260, 660, {
+        IOC.put("instructions", editor.toInstructions())
+        IOC.put("state", States.PLOTTING_SCREEN)
+    })
 
     private val buttons = listOf(
         CompositeButton(640, 220, Assets.Names.BUTTON, "MUL", {
@@ -59,6 +62,10 @@ class CodeEditorState : IState {
         CompositeButton(820, 160, Assets.Names.BUTTON, "Y", {
             editor.setSymbolUnderCursor("Y")
             editor.moveCursorRight()
+        }),
+        CompositeButton(910, 160, Assets.Names.BUTTON, "MOV", {
+            editor.setSymbolUnderCursor("MOV")
+            editor.moveCursorRight()
         })
     )
 
@@ -87,6 +94,8 @@ class CodeEditorState : IState {
         hud.batch.managed {
             it.draw(am.at<Texture>(Assets.Names.MONIK), 0f, 0f)
         }
+
+        compileButton.update()
 
         buttons.forEach {
             it.update()

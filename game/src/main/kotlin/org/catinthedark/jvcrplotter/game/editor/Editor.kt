@@ -1,5 +1,8 @@
 package org.catinthedark.jvcrplotter.game.editor
 
+import org.catinthedark.jvcrplotter.game.asm.*
+import org.catinthedark.jvcrplotter.game.asm.exceptions.InvalidInstructionException
+import org.catinthedark.jvcrplotter.game.asm.ops.*
 import org.slf4j.LoggerFactory
 
 class Editor(private val widthInBlocks: Int) {
@@ -92,6 +95,91 @@ class Editor(private val widthInBlocks: Int) {
             logger.info("delete ${cursorY}th line")
             if (cursorY >= contents.size) {
                 cursorY = contents.size - 1
+            }
+        }
+    }
+
+    fun toInstructions(): List<Operation> {
+        val operations = mutableListOf<Operation>()
+        for (y in 0 until contents.size) {
+            val val1 = toValue(1, y)
+            val val2 = toValue(2, y)
+            val op = toOperation(0, y, val1, val2)
+            operations += op
+        }
+
+        return operations
+    }
+
+    private fun toOperation(x: Int, y: Int, val1: Value?, val2: Value?): Operation {
+        cursorX = x
+        cursorY = y
+        return when (val opcode = getSymbolUnderCursor()) {
+            "ADD" -> AddOp(toMutableOrFail(val1), getOrFail(val2))
+            "CMP" -> CmpOp(getOrFail(val1), getOrFail(val2))
+            "INT" -> {
+                checkNull(val2)
+                return IntOp(getOrFail(val1))
+            }
+            "JE" -> {
+                checkNull(val2)
+                return JeOp(getOrFail(val1))
+            }
+            "JG" -> {
+                checkNull(val2)
+                return JgOp(getOrFail(val1))
+            }
+            "JL" -> {
+                checkNull(val2)
+                return JlOp(getOrFail(val1))
+            }
+            "JMP" -> {
+                checkNull(val2)
+                return JmpOp(getOrFail(val1))
+            }
+            "MOV" -> MovOp(toMutableOrFail(val1), getOrFail(val2))
+            "MUL" -> MulOp(toMutableOrFail(val1), getOrFail(val2))
+            else -> throw InvalidInstructionException("Unsupported instruction $opcode!")
+        }
+    }
+
+    private fun checkNull(operand: Value?) {
+        if (operand != null) {
+            throw InvalidInstructionException("Operand should not be here")
+        }
+    }
+
+    private fun getOrFail(operand: Value?): Value {
+        return operand ?: throw InvalidInstructionException("Invalid operand!")
+    }
+
+    private fun toMutableOrFail(operand: Value?): MutableValue {
+        if (operand == null) {
+            throw InvalidInstructionException("Invalid operand!")
+        }
+        if (operand is MutableValue) {
+            return operand
+        } else {
+            throw InvalidInstructionException("Invalid operand type!")
+        }
+    }
+
+    private fun toValue(x: Int, y: Int): Value? {
+        cursorX = x
+        cursorY = y
+
+        return when (val valueStr = getSymbolUnderCursor()) {
+            "X" -> ValueRegister(X)
+            "Y" -> ValueRegister(Y)
+            "A" -> ValueRegister(A)
+            "B" -> ValueRegister(B)
+            "" -> null
+            else -> {
+                try {
+                    ValueLiteral(valueStr.toInt())
+                } catch (e: NumberFormatException) {
+                    throw InvalidInstructionException("Unable to convert value to literal!", e)
+                }
             }
         }
     }

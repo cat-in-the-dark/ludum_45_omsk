@@ -7,12 +7,10 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
 import org.catinthedark.jvcrplotter.game.Assets
 import org.catinthedark.jvcrplotter.game.Const
-import org.catinthedark.jvcrplotter.game.asm.*
-import org.catinthedark.jvcrplotter.game.asm.ops.*
-import org.catinthedark.jvcrplotter.game.interruptions.INT_DOWN
-import org.catinthedark.jvcrplotter.game.interruptions.INT_UP
+import org.catinthedark.jvcrplotter.game.asm.Interpreter
+import org.catinthedark.jvcrplotter.game.asm.Operation
+import org.catinthedark.jvcrplotter.game.asm.State
 import org.catinthedark.jvcrplotter.game.interruptions.InterruptionsRegistry
-import org.catinthedark.jvcrplotter.game.interruptions.MOVE_PLOTTER
 import org.catinthedark.jvcrplotter.game.plotter.PlotState
 import org.catinthedark.jvcrplotter.game.plotter.PlotVRAM
 import org.catinthedark.jvcrplotter.lib.IOC
@@ -28,6 +26,7 @@ class PlottingScreenState : IState {
     private val interpreter = Interpreter()
 
     private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
+    private val instructions: List<Operation> by lazy { IOC.atOrFail<List<Operation>>("instructions") }
     private val am: AssetManager by lazy { Assets.load() }
     private lateinit var state: State
     private lateinit var plotState: PlotState
@@ -40,37 +39,7 @@ class PlottingScreenState : IState {
         running = true
 
         state = State(
-            instructions = listOf(
-                MovOp(ValueRegister(X), ValueLiteral(1)),
-                MovOp(ValueRegister(Y), ValueLiteral(1)),
-                IntOp(ValueLiteral(INT_UP)),
-                IntOp(ValueLiteral(MOVE_PLOTTER)),
-
-                MovOp(ValueRegister(A), ValueLiteral(30)),
-                MovOp(ValueRegister(B), ValueLiteral(1)),
-
-                MovOp(ValueRegister(X), ValueRegister(A)),
-                IntOp(ValueLiteral(INT_DOWN)),
-                IntOp(ValueLiteral(MOVE_PLOTTER)),
-
-                MovOp(ValueRegister(Y), ValueRegister(A)),
-                IntOp(ValueLiteral(INT_DOWN)),
-                IntOp(ValueLiteral(MOVE_PLOTTER)),
-
-                MovOp(ValueRegister(X), ValueRegister(B)),
-                IntOp(ValueLiteral(INT_DOWN)),
-                IntOp(ValueLiteral(MOVE_PLOTTER)),
-
-                MovOp(ValueRegister(Y), ValueRegister(B)),
-                IntOp(ValueLiteral(INT_DOWN)),
-                IntOp(ValueLiteral(MOVE_PLOTTER)),
-
-                AddOp(ValueRegister(B), ValueLiteral(2)),
-                AddOp(ValueRegister(A), ValueLiteral(-2)),
-
-                CmpOp(ValueRegister(A), ValueLiteral(14)),
-                JgOp(ValueLiteral(-16))
-            )
+            instructions = instructions
         )
         plotState = PlotState(
             PlotVRAM(width = Const.Plotter.WIDTH, height = Const.Plotter.HEIGHT)
