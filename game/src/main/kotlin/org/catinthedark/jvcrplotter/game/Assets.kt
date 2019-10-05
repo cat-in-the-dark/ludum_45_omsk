@@ -58,12 +58,15 @@ object Assets {
                 fontParameters.color = Color.BLACK
                 fontFileName = "fonts/cyrillic_pixel.ttf"
             })
-            load(Names.FONT_SMALL_WHITE, BitmapFont::class.java, FreetypeFontLoader.FreeTypeFontLoaderParameter().apply {
-                fontParameters.size = 20
-                fontParameters.characters = RUSSIAN_CHARACTERS
-                fontParameters.color = Color.WHITE
-                fontFileName = "fonts/cyrfont.ttf"
-            })
+            load(
+                Names.FONT_SMALL_WHITE,
+                BitmapFont::class.java,
+                FreetypeFontLoader.FreeTypeFontLoaderParameter().apply {
+                    fontParameters.size = 20
+                    fontParameters.characters = RUSSIAN_CHARACTERS
+                    fontParameters.color = Color.WHITE
+                    fontFileName = "fonts/cyrfont.ttf"
+                })
             load(
                 Names.FONT_MEDIUM_BLACK,
                 BitmapFont::class.java,
@@ -96,11 +99,14 @@ object Assets {
         val FONT_BIG_SERIF = "font_big_serif.ttf"
         val LOGO = "textures/title.png"
         val TITLE = "textures/title.png"
-
+        val MONIK = "textures/monik.png"
+        val KNOPKA = "textures/knopka.png"
 
         val textures = listOf(
             LOGO,
-            TITLE
+            TITLE,
+            MONIK,
+            KNOPKA
         )
     }
 }

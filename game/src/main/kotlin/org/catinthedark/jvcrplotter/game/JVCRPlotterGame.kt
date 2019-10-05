@@ -30,8 +30,8 @@ class JVCRPlotter : Game() {
     private val hud: Stage by lazy {
         Stage(
             FitViewport(
-                Const.Screen.WIDTH_BIG / Const.Screen.ZOOM_BIG,
-                Const.Screen.HEIGHT_BIG / Const.Screen.ZOOM_BIG,
+                Const.Screen.WIDTH / Const.Screen.ZOOM,
+                Const.Screen.HEIGHT / Const.Screen.ZOOM,
                 OrthographicCamera()
             ), SpriteBatch()
         )

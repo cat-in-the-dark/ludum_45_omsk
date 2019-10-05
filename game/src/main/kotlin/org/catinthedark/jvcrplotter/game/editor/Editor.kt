@@ -62,8 +62,10 @@ class Editor(private val widthInBlocks: Int) {
         if (cursorY == contents.size - 1) {
             contents.add(mutableListOf("", "", ""))
         } else {
-            contents.add(cursorY, mutableListOf("", "", ""))
+            contents.add(cursorY + 1, mutableListOf("", "", ""))
         }
+
+        cursorY += 1
 
         logger.info("total lines: ${contents.size}")
     }
