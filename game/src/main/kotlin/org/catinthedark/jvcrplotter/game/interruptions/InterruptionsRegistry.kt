@@ -11,9 +11,9 @@ class InterruptionsRegistry(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     private val intRegistry = mapOf(
-        INT_UP to UpPlotterInt(state),
-        INT_DOWN to DownPlotterInt(state),
-        MOVE_PLOTTER to MovePlotterInt(state)
+        INT_UP to UpPlotterInt(state, plotState),
+        INT_DOWN to DownPlotterInt(state, plotState),
+        MOVE_PLOTTER to MovePlotterInt(state, plotState)
     )
 
     fun apply(intCode: Int): Boolean {

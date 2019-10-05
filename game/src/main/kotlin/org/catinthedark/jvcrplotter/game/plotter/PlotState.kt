@@ -19,10 +19,21 @@ data class PlotVRAM(
     val width: Int,
     val height: Int
 ) {
+    var currentX: Int = 0
+        private set
+    var currentY: Int = 0
+        private set
     private val vram: List<MutableList<Color>> = List(width) { MutableList(height) { BLACK_COLOR } }
 
-    fun draw(x: Int, y: Int, c: Color) {
-        vram[x.coerceIn(0, width - 1)][y.coerceIn(0, height - 1)] = c
+    fun set(x: Int, y: Int, c: Color) {
+        currentX = x.coerceIn(0, width - 1)
+        currentY = y.coerceIn(0, height - 1)
+        vram[currentX][currentY] = c
+    }
+
+    fun set(x: Int, y: Int) {
+        currentX = x.coerceIn(0, width - 1)
+        currentY = y.coerceIn(0, height - 1)
     }
 
     fun get(x: Int, y: Int): Color {
