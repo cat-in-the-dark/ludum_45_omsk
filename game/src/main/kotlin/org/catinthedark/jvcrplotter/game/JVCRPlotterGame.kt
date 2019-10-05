@@ -8,13 +8,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.FitViewport
-import org.catinthedark.jvcrplotter.game.states.CodeEditorState
-import org.catinthedark.jvcrplotter.game.states.SplashScreenState
-import org.catinthedark.jvcrplotter.game.states.StartNewGameState
-import org.catinthedark.jvcrplotter.game.states.TitleScreenState
+import org.catinthedark.jvcrplotter.game.states.*
 import org.catinthedark.jvcrplotter.lib.Deffer
 import org.catinthedark.jvcrplotter.lib.DefferImpl
 import org.catinthedark.jvcrplotter.lib.IOC
+import org.catinthedark.jvcrplotter.lib.atOrFail
 import org.catinthedark.jvcrplotter.lib.states.StateMachine
 
 class JVCRPlotter : Game() {
@@ -42,14 +40,20 @@ class JVCRPlotter : Game() {
                 States.SPLASH_SCREEN to SplashScreenState(),
                 States.TITLE_SCREEN to TitleScreenState(),
                 States.CODE_EDITOR_SCREEN to CodeEditorState(),
+                States.PLOTTING_SCREEN to PlottingScreenState(),
                 States.START_NEW_GAME_STATE to StartNewGameState()
             )
             putMixins(
-                States.TITLE_SCREEN
+                States.SPLASH_SCREEN,
+                States.TITLE_SCREEN,
+                States.CODE_EDITOR_SCREEN,
+                States.PLOTTING_SCREEN,
+                States.START_NEW_GAME_STATE
             ) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                     IOC.put("state", States.TITLE_SCREEN)
                 }
+                IOC.atOrFail<InputAdapterHolder>("inputs").update()
             }
         }
     }
@@ -59,6 +63,9 @@ class JVCRPlotter : Game() {
         IOC.put("stage", stage)
         IOC.put("hud", hud)
         IOC.put("state", States.SPLASH_SCREEN)
+        val inputs = InputAdapterHolder(stage)
+        Gdx.input.inputProcessor = inputs
+        IOC.put("inputs", inputs)
     }
 
     override fun render() {
