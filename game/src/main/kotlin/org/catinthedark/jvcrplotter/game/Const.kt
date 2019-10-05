@@ -7,6 +7,11 @@ object Const {
         const val ZOOM = 1f
     }
 
+    object Plotter {
+        const val WIDTH = 32
+        const val HEIGHT = 32
+    }
+
     object Balance {
 
     }

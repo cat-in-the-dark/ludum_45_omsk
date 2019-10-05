@@ -18,7 +18,7 @@ class InterruptionsRegistry(
 
     fun apply(intCode: Int): Boolean {
         val i = intRegistry[intCode] ?: throw Exception("Unknown interruption $intCode")
-        logger.info(i.name)
+//        logger.info(i.name)
         val res = i.apply()
         if (res) {
             state.intCode = -1

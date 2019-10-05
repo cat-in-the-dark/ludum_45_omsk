@@ -1,18 +1,11 @@
 package org.catinthedark.jvcrplotter.game.plotter
 
-data class Color(
-    val R: Int,
-    val G: Int,
-    val B: Int,
-    val A: Int = 255
-)
-
-val BLACK_COLOR = Color(0, 0, 0, 255)
+import com.badlogic.gdx.graphics.Color
 
 data class PlotState(
     val vram: PlotVRAM,
     var isPointerUp: Boolean = true,
-    var color: Color = BLACK_COLOR
+    var color: Color = Color.BLUE
 )
 
 data class PlotVRAM(
@@ -23,7 +16,11 @@ data class PlotVRAM(
         private set
     var currentY: Int = 0
         private set
-    private val vram: List<MutableList<Color>> = List(width) { MutableList(height) { BLACK_COLOR } }
+    private val vram: List<MutableList<Color>> = List(width) {
+        MutableList(height) {
+            Color.WHITE
+        }
+    }
 
     fun set(x: Int, y: Int, c: Color) {
         currentX = x.coerceIn(0, width - 1)
@@ -36,7 +33,11 @@ data class PlotVRAM(
         currentY = y.coerceIn(0, height - 1)
     }
 
-    fun get(x: Int, y: Int): Color {
+    fun getC(x: Int, y: Int): Color {
         return vram[x.coerceIn(0, width - 1)][y.coerceIn(0, height - 1)]
+    }
+
+    fun get(x: Int, y: Int): Int {
+        return getC(x, y).toIntBits()
     }
 }
