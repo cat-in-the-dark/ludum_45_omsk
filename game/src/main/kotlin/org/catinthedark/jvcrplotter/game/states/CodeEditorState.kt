@@ -3,6 +3,7 @@ package org.catinthedark.jvcrplotter.game.states
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputAdapter
+import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -12,6 +13,7 @@ import org.catinthedark.jvcrplotter.game.Const
 import org.catinthedark.jvcrplotter.game.at
 import org.catinthedark.jvcrplotter.game.editor.Editor
 import org.catinthedark.jvcrplotter.game.font
+import org.catinthedark.jvcrplotter.game.ui.CompositeButton
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.atOrFail
 import org.catinthedark.jvcrplotter.lib.managed
@@ -23,24 +25,49 @@ class CodeEditorState : IState {
     private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
     private val editor: Editor by lazy { IOC.atOrFail<Editor>("editor") }
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
+    private val inputProcessor = Gdx.input.inputProcessor
+
+    private val mulButton = CompositeButton(640, 180, Assets.Names.BUTTON, "MUL", {
+        editor.setSymbolUnderCursor("MUL")
+        editor.moveCursorRight()
+    })
+
+    private val addButton = CompositeButton(730, 180, Assets.Names.BUTTON, "ADD", {
+        editor.setSymbolUnderCursor("ADD")
+        editor.moveCursorRight()
+    })
+
+    private val buttons = listOf(mulButton, addButton)
 
     override fun onActivate() {
         logger.info("game state activated")
-        Gdx.input.inputProcessor = EditorInputAdapter(editor)
+        Gdx.input.inputProcessor = EditorInputAdapter(editor, inputProcessor)
     }
 
-    class EditorInputAdapter(private val editor: Editor) : InputAdapter() {
+    class EditorInputAdapter(
+        private val editor: Editor,
+        private val inputProcessor: InputProcessor
+    ) : InputAdapter() {
+        override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+            return inputProcessor.touchDown(screenX, screenY, pointer, button)
+        }
+
         override fun keyTyped(character: Char): Boolean {
             if (character in '0'..'9') {
                 editor.setSymbolUnderCursor(editor.getSymbolUnderCursor() + character)
             }
-            return true
+            return inputProcessor.keyTyped(character)
         }
     }
 
     override fun onUpdate() {
         hud.batch.managed {
             it.draw(am.at<Texture>(Assets.Names.MONIK), 0f, 0f)
+        }
+
+        buttons.forEach {
+            it.update()
+            it.draw(hud.batch)
         }
 
         when {
@@ -53,15 +80,10 @@ class CodeEditorState : IState {
             Gdx.input.isKeyJustPressed(Input.Keys.FORWARD_DEL) -> editor.deleteLine()
         }
 
-        val pos = editor.getCursorPosition()
-        if (pos.first == 0) {
-
-        }
-
-        drawEditor(editor)
+        renderEditorText(editor)
     }
 
-    private fun drawEditor(editor: Editor) {
+    private fun renderEditorText(editor: Editor) {
         hud.batch.managed { b ->
             val initX = 80f
             val initY = Const.Screen.HEIGHT.toFloat() - 80f
@@ -75,5 +97,6 @@ class CodeEditorState : IState {
     }
 
     override fun onExit() {
+        Gdx.input.inputProcessor = inputProcessor
     }
 }

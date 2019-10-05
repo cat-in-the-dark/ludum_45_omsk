@@ -22,6 +22,7 @@ class InputAdapterHolder(
     }
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+        logger.info("click left")
         if (pointer == Input.Buttons.LEFT) {
             isMouseClicked = true
             updateMousePos()

@@ -10,4 +10,9 @@ object Const {
     object Balance {
 
     }
+
+    object UI {
+        const val buttonHeight = 39
+        const val buttonWidth = 70
+    }
 }

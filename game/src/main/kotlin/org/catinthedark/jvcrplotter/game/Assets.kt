@@ -100,13 +100,13 @@ object Assets {
         val LOGO = "textures/title.png"
         val TITLE = "textures/title.png"
         val MONIK = "textures/monik.png"
-        val KNOPKA = "textures/knopka.png"
+        val BUTTON = "textures/knopka.png"
 
         val textures = listOf(
             LOGO,
             TITLE,
             MONIK,
-            KNOPKA
+            BUTTON
         )
     }
 }
