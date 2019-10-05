@@ -9,6 +9,7 @@ class CmpOp(
     private val op1: Value,
     private val op2: Value
 ) : Operation {
+    override val name = "cmp"
     override fun apply(state: State) {
         state.registers[FLAG] = op1.get(state).compareTo(op2.get(state))
     }

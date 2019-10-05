@@ -21,6 +21,7 @@ class AddOp(
     private val op1: MutableValue,
     private val op2: Value
 ): Operation {
+    override val name = "add"
     override fun apply(state: State) {
         op1.set(state, op1.get(state) + op2.get(state))
     }

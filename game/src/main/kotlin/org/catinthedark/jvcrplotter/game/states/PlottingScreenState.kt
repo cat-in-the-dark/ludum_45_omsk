@@ -6,6 +6,10 @@ import org.catinthedark.jvcrplotter.game.Assets
 import org.catinthedark.jvcrplotter.game.asm.*
 import org.catinthedark.jvcrplotter.game.asm.ops.IntOp
 import org.catinthedark.jvcrplotter.game.asm.ops.MovOp
+import org.catinthedark.jvcrplotter.game.interruptions.INT_DOWN
+import org.catinthedark.jvcrplotter.game.interruptions.INT_UP
+import org.catinthedark.jvcrplotter.game.interruptions.InterruptionsRegistry
+import org.catinthedark.jvcrplotter.game.interruptions.MOVE_PLOTTER
 import org.catinthedark.jvcrplotter.game.plotter.PlotState
 import org.catinthedark.jvcrplotter.game.plotter.PlotVRAM
 import org.catinthedark.jvcrplotter.lib.states.IState
@@ -19,17 +23,13 @@ class PlottingScreenState : IState {
 
     private val am: AssetManager by lazy { Assets.load() }
     private lateinit var state: State
-    private lateinit var plotState: PlotState
+    private lateinit var intRegistry: InterruptionsRegistry
     private var running: Boolean = true
 
     override fun onActivate() {
         logger.info("onActivate")
         time = 0f
         running = true
-
-        plotState = PlotState(
-            PlotVRAM(width = 32, height = 32)
-        )
 
         state = State(
             instructions = listOf(
@@ -55,6 +55,12 @@ class PlottingScreenState : IState {
                 IntOp(ValueLiteral(MOVE_PLOTTER))
             )
         )
+        intRegistry = InterruptionsRegistry(
+            state = state,
+            plotState = PlotState(
+                PlotVRAM(width = 32, height = 32)
+            )
+        )
     }
 
     override fun onUpdate() {
@@ -62,10 +68,10 @@ class PlottingScreenState : IState {
 
         if (running) {
             try {
-                if (!interpreter.step(state)) {
-                    running = false
-                    logger.info("FINIS!!!!!!!!!!")
-                    // TODO: go to next state????
+                if (state.intCode > 0) {
+                    intRegistry.apply(state.intCode)
+                } else {
+                    running = interpreter.step(state)
                 }
             } catch (e: Exception) {
                 running = false

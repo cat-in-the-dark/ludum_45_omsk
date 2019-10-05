@@ -17,6 +17,7 @@ class MovOp(
     private val op1: MutableValue,
     private val op2: Value
 ) : Operation {
+    override val name = "mov"
     override fun apply(state: State) {
         op1.set(state, op2.get(state))
     }

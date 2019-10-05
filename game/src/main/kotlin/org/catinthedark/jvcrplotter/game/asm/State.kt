@@ -35,7 +35,5 @@ data class State(
         }
     }
 
-    fun print() {
-        println("line=${programCounter} X=${get(X)} Y=${get(Y)} A=${get(A)} B=${get(B)} FLAG=${get(FLAG)}")
-    }
+    fun repr() = "op=${instructions[programCounter].name} line=${programCounter} X=${get(X)} Y=${get(Y)} A=${get(A)} B=${get(B)} FLAG=${get(FLAG)}"
 }

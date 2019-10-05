@@ -62,7 +62,7 @@ class JVCRPlotter : Game() {
         IOC.put("deffer", DefferImpl())
         IOC.put("stage", stage)
         IOC.put("hud", hud)
-        IOC.put("state", States.SPLASH_SCREEN)
+        IOC.put("state", States.PLOTTING_SCREEN)
         val inputs = InputAdapterHolder(stage)
         Gdx.input.inputProcessor = inputs
         IOC.put("inputs", inputs)
