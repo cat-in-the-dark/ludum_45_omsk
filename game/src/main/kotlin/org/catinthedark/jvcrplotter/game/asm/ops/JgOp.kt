@@ -9,7 +9,8 @@ class JgOp(
     private val op2: Value
 ) : Operation {
     override fun apply(state: State) {
-        if (state.registers[FLAG] > 0) {
+
+        if (state.get(FLAG) > 0) {
             state.programCounter += op2.get(state)
         }
     }

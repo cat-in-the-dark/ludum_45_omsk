@@ -18,11 +18,9 @@ class MovOpTest {
 
     @Test
     fun ShouldPutRegisterToRegister() {
-        val state = State(
-            registers = mutableListOf(
-                0, 42
-            )
-        )
+        val state = State()
+        state.set(Y, 42)
+
         val mov = MovOp(
             ValueRegister(X),
             ValueRegister(Y)
