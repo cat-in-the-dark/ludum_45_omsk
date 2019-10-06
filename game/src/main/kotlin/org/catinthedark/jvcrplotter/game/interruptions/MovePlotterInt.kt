@@ -27,14 +27,16 @@ class MovePlotterInt(
             return true
         }
 
-        val x = plotState.vram.currentX + dx.sign
-        val y = plotState.vram.currentY + dy.sign
+        val x = plotState.vram.currentX
+        val y = plotState.vram.currentY
 
         if (plotState.isPointerUp) {
             plotState.vram.set(x, y) // just move
         } else {
             plotState.vram.set(x, y, plotState.pencilColor)
         }
+
+        plotState.vram.set(plotState.vram.currentX + dx.sign, plotState.vram.currentY + dy.sign)
 
         return false
     }
