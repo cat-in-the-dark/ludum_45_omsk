@@ -127,6 +127,10 @@ object Assets {
         val ERROR_FRAME = "textures/frame_red_9.png"
         val LINE_FRAME = "textures/frame_line_9.png"
         val WORKSPACE = "textures/workspace.png"
+        val EDITOR = "textures/editor.png"
+        val TASK = "textures/task.png"
+        val MAN = "textures/man.png"
+        val PLOTTER = "textures/plotter.png"
 
         val textures = listOf(
             LOGO,
@@ -141,7 +145,11 @@ object Assets {
             WORKSPACE,
             ICON_MOVE,
             ICON_SET_PLOT,
-            ICON_UNSET_PLOT
+            ICON_UNSET_PLOT,
+            EDITOR,
+            TASK,
+            MAN,
+            PLOTTER
         )
     }
 }

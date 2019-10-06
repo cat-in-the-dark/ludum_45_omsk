@@ -18,12 +18,24 @@ class WorkspaceScreenState : IState {
 
     private val editorBtn = Button(450,175,630,315, onClick = {
         IOC.put("state", States.CODE_EDITOR_SCREEN)
+    }, onHover = {
+        hud.batch.managed {
+            it.draw(am.texture(Assets.Names.EDITOR), 450f, 175f)
+        }
     })
     private val manPageBtm = Button(50,170, 160, 250, onClick = {
         IOC.put("state", States.MAN_PAGE_SCREEN)
+    }, onHover = {
+        hud.batch.managed {
+            it.draw(am.texture(Assets.Names.MAN), 99f, 171f)
+        }
     })
     private val taskBtm = Button(1140,310, 1250, 420, onClick = {
         IOC.put("state", States.TASK_SCREEN)
+    }, onHover = {
+        hud.batch.managed {
+            it.draw(am.texture(Assets.Names.TASK), 1140f, 310f)
+        }
     })
 
     override fun onActivate() {
