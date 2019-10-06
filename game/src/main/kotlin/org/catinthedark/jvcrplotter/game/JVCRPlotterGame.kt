@@ -43,6 +43,7 @@ class JVCRPlotter : Game() {
                 States.PLOTTING_SCREEN to PlottingScreenState(),
                 States.START_NEW_GAME_STATE to StartNewGameState(),
                 States.MAN_PAGE_SCREEN to ManPageScreenState(),
+                States.TUTORIAL_STATE to TutorialState(),
                 States.TASK_SCREEN to TaskScreenState(),
                 States.WORKSPACE_SCREEN to WorkspaceScreenState(),
                 States.SUCCESS_SCREEN to SuccessScreenState()
@@ -67,6 +68,7 @@ class JVCRPlotter : Game() {
                 States.CODE_EDITOR_SCREEN,
                 States.PLOTTING_SCREEN,
                 States.START_NEW_GAME_STATE,
+                States.TUTORIAL_STATE,
                 States.MAN_PAGE_SCREEN,
                 States.TASK_SCREEN,
                 States.WORKSPACE_SCREEN

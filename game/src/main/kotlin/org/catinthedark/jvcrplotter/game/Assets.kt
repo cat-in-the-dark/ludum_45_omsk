@@ -131,6 +131,11 @@ object Assets {
         val TASK = "textures/task.png"
         val MAN = "textures/man.png"
         val PLOTTER = "textures/plotter.png"
+        val TUTORIAL1 = "textures/tutorial1.png"
+        val TUTORIAL2 = "textures/tutorial2.png"
+        val TUTORIAL3 = "textures/tutorial3.png"
+        val TUTORIAL4 = "textures/tutorial4.png"
+        val TUTORIAL5 = "textures/tutorial5.png"
 
         val textures = listOf(
             LOGO,
@@ -149,7 +154,12 @@ object Assets {
             EDITOR,
             TASK,
             MAN,
-            PLOTTER
+            PLOTTER,
+            TUTORIAL1,
+            TUTORIAL2,
+            TUTORIAL3,
+            TUTORIAL4,
+            TUTORIAL5
         )
     }
 }
