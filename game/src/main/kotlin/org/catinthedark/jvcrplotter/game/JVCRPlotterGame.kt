@@ -41,14 +41,20 @@ class JVCRPlotter : Game() {
                 States.TITLE_SCREEN to TitleScreenState(),
                 States.CODE_EDITOR_SCREEN to CodeEditorState(),
                 States.PLOTTING_SCREEN to PlottingScreenState(),
-                States.START_NEW_GAME_STATE to StartNewGameState()
+                States.START_NEW_GAME_STATE to StartNewGameState(),
+                States.MAN_PAGE_SCREEN to ManPageScreenState(),
+                States.TASK_SCREEN to TaskScreenState(),
+                States.WORKSPACE_SCREEN to WorkspaceScreenState()
             )
             putMixins(
                 States.SPLASH_SCREEN,
                 States.TITLE_SCREEN,
                 States.CODE_EDITOR_SCREEN,
                 States.PLOTTING_SCREEN,
-                States.START_NEW_GAME_STATE
+                States.START_NEW_GAME_STATE,
+                States.MAN_PAGE_SCREEN,
+                States.TASK_SCREEN,
+                States.WORKSPACE_SCREEN
             ) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                     IOC.put("state", States.TITLE_SCREEN)

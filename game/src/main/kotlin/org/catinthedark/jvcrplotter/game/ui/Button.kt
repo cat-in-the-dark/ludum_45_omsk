@@ -1,5 +1,9 @@
 package org.catinthedark.jvcrplotter.game.ui
 
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Pixmap
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.Batch
 import org.catinthedark.jvcrplotter.game.InputAdapterHolder
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.at
@@ -30,5 +34,15 @@ class Button(
                 isClicked = true
             }
         }
+    }
+
+    fun draw(b: Batch) {
+        val w = xMax - xMin
+        val h = yMax - yMin
+        val pixmap = Pixmap(w, h, Pixmap.Format.RGBA8888)
+        pixmap.setColor(Color.WHITE)
+        pixmap.fill()
+        b.draw(Texture(pixmap), xMin.toFloat(), yMin.toFloat(), w.toFloat(), h.toFloat())
+        pixmap.dispose()
     }
 }
