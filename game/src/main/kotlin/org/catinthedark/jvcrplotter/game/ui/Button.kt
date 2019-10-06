@@ -36,11 +36,11 @@ class Button(
         }
     }
 
-    fun draw(b: Batch) {
+    fun draw(b: Batch, color: Color = Color.WHITE) {
         val w = xMax - xMin
         val h = yMax - yMin
         val pixmap = Pixmap(w, h, Pixmap.Format.RGBA8888)
-        pixmap.setColor(Color.WHITE)
+        pixmap.setColor(color)
         pixmap.fill()
         b.draw(Texture(pixmap), xMin.toFloat(), yMin.toFloat(), w.toFloat(), h.toFloat())
         pixmap.dispose()

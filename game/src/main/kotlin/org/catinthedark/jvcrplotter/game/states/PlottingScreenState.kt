@@ -47,6 +47,7 @@ class PlottingScreenState : IState {
 
     override fun onActivate() {
         logger.info("onActivate")
+        IOC.put("previousState", States.CODE_EDITOR_SCREEN)
         time = 0f
         running = true
 

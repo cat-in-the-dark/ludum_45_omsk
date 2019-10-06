@@ -21,7 +21,7 @@ class StartNewGameState : IState {
             )
         )
         IOC.put("editor", editor)
-        IOC.put("state", States.CODE_EDITOR_SCREEN)
+        IOC.put("state", States.WORKSPACE_SCREEN)
     }
 
     override fun onUpdate() {

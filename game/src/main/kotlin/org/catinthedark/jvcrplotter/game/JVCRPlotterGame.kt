@@ -59,6 +59,12 @@ class JVCRPlotter : Game() {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                     IOC.put("state", States.TITLE_SCREEN)
                 }
+                if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
+                    val prevState = IOC.get("previousState")
+                    if (prevState != null) {
+                        IOC.put("state", prevState)
+                    }
+                }
                 IOC.atOrFail<InputAdapterHolder>("inputs").update()
             }
         }
