@@ -5,7 +5,7 @@ import org.catinthedark.jvcrplotter.game.Assets
 
 class ButtonPanel(private val onPressed: (instruction: String, update: Boolean) -> Unit = { s: String, b: Boolean -> }) {
     private val startX = 665
-    private val startY = 235
+    private val startY = 230
     private val deltaX = 90
     private val deltaY = 50
 
@@ -43,9 +43,6 @@ class ButtonPanel(private val onPressed: (instruction: String, update: Boolean) 
     private val threeButton = CompositeButton(toX(2), toY(0), Assets.Names.BUTTON, "3", {
         onPressed("3", true)
     })
-    private val minusButton = CompositeButton(toX(3), toY(0), Assets.Names.BUTTON, "-", {
-        onPressed("-", true)
-    })
     private val fourButton = CompositeButton(toX(0), toY(1), Assets.Names.BUTTON, "4", {
         onPressed("4", true)
     })
@@ -54,9 +51,6 @@ class ButtonPanel(private val onPressed: (instruction: String, update: Boolean) 
     })
     private val sixButton = CompositeButton(toX(2), toY(1), Assets.Names.BUTTON, "6", {
         onPressed("6", true)
-    })
-    private val zeroButton = CompositeButton(toX(3), toY(1), Assets.Names.BUTTON, "0", {
-        onPressed("0", true)
     })
     private val sevenButton = CompositeButton(toX(0), toY(2), Assets.Names.BUTTON, "7", {
         onPressed("7", true)
@@ -67,14 +61,23 @@ class ButtonPanel(private val onPressed: (instruction: String, update: Boolean) 
     private val nineButton = CompositeButton(toX(2), toY(2), Assets.Names.BUTTON, "9", {
         onPressed("9", true)
     })
-    private val xButton = CompositeButton(toX(4), toY(0), Assets.Names.BUTTON, "X", {
+    private val zeroButton = CompositeButton(toX(3), toY(2), Assets.Names.BUTTON, "0", {
+        onPressed("0", true)
+    })
+    private val minusButton = CompositeButton(toX(4), toY(2), Assets.Names.BUTTON, "-", {
+        onPressed("-", true)
+    })
+    private val xButton = CompositeButton(toX(3), toY(0), Assets.Names.BUTTON, "X", {
         onPressed("X", false)
     })
-    private val yButton = CompositeButton(toX(4), toY(1), Assets.Names.BUTTON, "Y", {
+    private val yButton = CompositeButton(toX(4), toY(0), Assets.Names.BUTTON, "Y", {
         onPressed("Y", false)
     })
-    private val aButton = CompositeButton(toX(4), toY(2), Assets.Names.BUTTON, "A", {
+    private val aButton = CompositeButton(toX(3), toY(1), Assets.Names.BUTTON, "A", {
         onPressed("A", false)
+    })
+    private val bButton = CompositeButton(toX(4), toY(1), Assets.Names.BUTTON, "B", {
+        onPressed("B", false)
     })
     private val unsetPlotButton = IconButton(toX(0), toY(2), Assets.Names.BUTTON, Assets.Names.ICON_UNSET_PLOT, {
         onPressed("INT", false)
@@ -109,6 +112,7 @@ class ButtonPanel(private val onPressed: (instruction: String, update: Boolean) 
         xButton,
         yButton,
         aButton,
+        bButton,
         zeroButton,
         oneButton,
         twoButton,
