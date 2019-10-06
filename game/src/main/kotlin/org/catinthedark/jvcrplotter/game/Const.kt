@@ -1,5 +1,7 @@
 package org.catinthedark.jvcrplotter.game
 
+import com.badlogic.gdx.graphics.Color
+
 object Const {
     object Screen {
         const val WIDTH = 1280
@@ -10,6 +12,7 @@ object Const {
     object Plotter {
         const val WIDTH = 32
         const val HEIGHT = 32
+        val COLOR = Color(0x00d410ff)
     }
 
     object Balance {

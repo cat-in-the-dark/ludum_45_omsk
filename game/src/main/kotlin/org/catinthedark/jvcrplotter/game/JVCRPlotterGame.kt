@@ -44,7 +44,8 @@ class JVCRPlotter : Game() {
                 States.START_NEW_GAME_STATE to StartNewGameState(),
                 States.MAN_PAGE_SCREEN to ManPageScreenState(),
                 States.TASK_SCREEN to TaskScreenState(),
-                States.WORKSPACE_SCREEN to WorkspaceScreenState()
+                States.WORKSPACE_SCREEN to WorkspaceScreenState(),
+                States.SUCCESS_SCREEN to SuccessScreenState()
             )
             putMixins(
                 States.SPLASH_SCREEN,
@@ -54,18 +55,28 @@ class JVCRPlotter : Game() {
                 States.START_NEW_GAME_STATE,
                 States.MAN_PAGE_SCREEN,
                 States.TASK_SCREEN,
-                States.WORKSPACE_SCREEN
+                States.WORKSPACE_SCREEN,
+                States.SUCCESS_SCREEN
             ) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                     IOC.put("state", States.TITLE_SCREEN)
                 }
+                IOC.atOrFail<InputAdapterHolder>("inputs").update()
+            }
+            putMixins(
+                States.CODE_EDITOR_SCREEN,
+                States.PLOTTING_SCREEN,
+                States.START_NEW_GAME_STATE,
+                States.MAN_PAGE_SCREEN,
+                States.TASK_SCREEN,
+                States.WORKSPACE_SCREEN
+            ) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
                     val prevState = IOC.get("previousState")
                     if (prevState != null) {
                         IOC.put("state", prevState)
                     }
                 }
-                IOC.atOrFail<InputAdapterHolder>("inputs").update()
             }
         }
     }

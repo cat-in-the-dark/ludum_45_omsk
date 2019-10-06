@@ -2,8 +2,8 @@ package org.catinthedark.jvcrplotter.game
 
 private fun toMatrix(l: List<Int>, w: Int, h: Int): List<List<Int>> {
     val m = List(w) { MutableList(h) { 0 } }
-    for (i in 0..w) {
-        for (j in 0..h) {
+    for (i in 0 until w) {
+        for (j in 0 until h) {
             m[i][j] = l[i + j * w]
         }
     }

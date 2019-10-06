@@ -41,3 +41,15 @@ data class PlotVRAM(
         return getC(x, y)
     }
 }
+
+fun PlotVRAMFromRaw(raw: List<List<Int>>, color: Color): PlotVRAM {
+    val vram = PlotVRAM(raw.size, raw[0].size)
+    for (i in raw.indices) {
+        for (j in raw[0].indices) {
+            if (raw[i][j] != 0) {
+                vram.set(i, j, color)
+            }
+        }
+    }
+    return vram
+}

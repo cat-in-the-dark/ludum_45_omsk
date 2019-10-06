@@ -16,6 +16,7 @@ import org.catinthedark.jvcrplotter.game.editor.Editor
 import org.catinthedark.jvcrplotter.game.interruptions.buildInterruptionsRegistry
 import org.catinthedark.jvcrplotter.game.plotter.PlotState
 import org.catinthedark.jvcrplotter.game.plotter.PlotVRAM
+import org.catinthedark.jvcrplotter.game.plotter.PlotVRAMFromRaw
 import org.catinthedark.jvcrplotter.game.ui.CompositeNinePatchButton
 import org.catinthedark.jvcrplotter.game.ui.EditorRender
 import org.catinthedark.jvcrplotter.lib.IOC
@@ -24,10 +25,31 @@ import org.catinthedark.jvcrplotter.lib.managed
 import org.catinthedark.jvcrplotter.lib.states.IState
 import org.slf4j.LoggerFactory
 
+private fun createPlot(vram: PlotVRAM): Texture {
+    val pixmap = Pixmap(
+        Const.Plotter.WIDTH, Const.Plotter.HEIGHT, Pixmap.Format.RGBA8888
+    )
+    for (x in 0 until vram.width) {
+        for (y in 0 until vram.height) {
+            pixmap.drawPixel(x, y, vram.get(x, y).toAbgr())
+        }
+    }
+
+    val tex = Texture(pixmap)
+    pixmap.dispose()
+    return tex
+}
+
+private fun createPlot(raw: List<List<Int>>): Texture {
+    val vram = PlotVRAMFromRaw(raw, Const.Plotter.COLOR)
+    return createPlot(vram)
+}
+
 class PlottingScreenState : IState {
     private val logger = LoggerFactory.getLogger(javaClass)
     private var time: Float = 0f
     private lateinit var interpreter: Interpreter
+    private var ok = true
 
     private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
     private var instructions: List<Operation> = listOf()
@@ -40,9 +62,10 @@ class PlottingScreenState : IState {
     private val editor: Editor by lazy { IOC.atOrFail<Editor>("editor") }
     private val cursorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.LINE_FRAME), 6, 6, 6, 6) }
     private val errorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.ERROR_FRAME), 6, 6, 6, 6) }
+    private val font by lazy { am.font(Assets.Names.FONT_BIG_GREEN) }
     private val editorRender: EditorRender by lazy {
         EditorRender(
-            hud.batch, am.font(Assets.Names.FONT_BIG_GREEN),
+            hud.batch, font,
             cursorFrame,
             errorFrame
         )
@@ -69,7 +92,7 @@ class PlottingScreenState : IState {
         )
         plotState = PlotState(
             PlotVRAM(width = Const.Plotter.WIDTH, height = Const.Plotter.HEIGHT),
-            pencilColor = Color(0x00d410ff)
+            pencilColor = Const.Plotter.COLOR
         )
         interpreter = Interpreter(
             buildInterruptionsRegistry(
@@ -79,31 +102,49 @@ class PlottingScreenState : IState {
         )
     }
 
-    private fun createPlot(): Texture {
-        val pixmap = Pixmap(
-            Const.Plotter.WIDTH, Const.Plotter.HEIGHT, Pixmap.Format.RGBA8888
-        )
-        for (x in 0..plotState.vram.width) {
-            for (y in 0..plotState.vram.height) {
-                pixmap.drawPixel(x, y, plotState.vram.get(x, y).toAbgr())
-            }
-        }
-
-        val tex = Texture(pixmap)
-        pixmap.dispose()
-        return tex
-    }
-
     private fun draw() {
         if (running) {
             try {
                 running = interpreter.step(state)
                 editor.setCursorPosition(0, state.programCounter)
+                ok = true
             } catch (e: Exception) {
                 running = false
+                ok = false
                 logger.error("FAIL", e)
                 // TODO: Show error for the user???
             }
+        } else {
+            if (!ok) return
+
+            val taskId: Int = IOC.atOrFail("currentTaskId")
+            val task = Tasks.tasks[taskId]
+            if (plotState.vram.check(task)) {
+                IOC.put("state", States.SUCCESS_SCREEN)
+            } else {
+                showErrorPopup(task)
+            }
+        }
+    }
+
+    private fun showErrorPopup(task: List<List<Int>>) {
+        val w = 352+352+8+20+20
+        val h = 430
+        val pixmap = Pixmap(w, h, Pixmap.Format.RGBA8888)
+        pixmap.setColor(Color.CYAN)
+        pixmap.fill()
+        val tex = Texture(pixmap)
+        pixmap.dispose()
+
+        val got = createPlot(plotState.vram)
+        val expected = createPlot(task)
+
+        hud.batch.managed {
+            it.draw(tex, 300f, 150f)
+            font.draw(it, "ОБНАРУЖЕНО НЕСОВПАДЕНИЕ", 320f, 570f)
+
+            it.draw(got, 320f, 170f, 352f,352f)
+            it.draw(expected, 320f + 352f + 8f, 170f, 352f,352f)
         }
     }
 
@@ -113,7 +154,7 @@ class PlottingScreenState : IState {
 
         hud.batch.managed {
             it.draw(am.at<Texture>(Assets.Names.MONIK), 0f, 0f)
-            it.draw(createPlot(), 700f, 310f, 352f, 352f)
+            it.draw(createPlot(plotState.vram), 700f, 310f, 352f, 352f)
         }
 
         renderEditorText(editor)

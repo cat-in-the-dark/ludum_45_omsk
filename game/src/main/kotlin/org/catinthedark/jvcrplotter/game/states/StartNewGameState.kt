@@ -16,12 +16,12 @@ class StartNewGameState : IState {
                 mutableListOf("MOV", "X", "10"),
                 mutableListOf("MOV", "Y", "20"),
                 mutableListOf("INT", "43", ""),
-                mutableListOf("INT", "44", ""),
-                mutableListOf("JMP", "-9", "")
+                mutableListOf("INT", "44", "")
             )
         )
         IOC.put("editor", editor)
         IOC.put("state", States.WORKSPACE_SCREEN)
+        IOC.put("currentTaskId", 0)
     }
 
     override fun onUpdate() {
