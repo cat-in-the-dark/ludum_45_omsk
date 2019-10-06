@@ -11,7 +11,7 @@ import org.catinthedark.jvcrplotter.game.asm.Interpreter
 import org.catinthedark.jvcrplotter.game.asm.Operation
 import org.catinthedark.jvcrplotter.game.asm.State
 import org.catinthedark.jvcrplotter.game.editor.Editor
-import org.catinthedark.jvcrplotter.game.interruptions.InterruptionsRegistry
+import org.catinthedark.jvcrplotter.game.interruptions.buildInterruptionsRegistry
 import org.catinthedark.jvcrplotter.game.plotter.PlotState
 import org.catinthedark.jvcrplotter.game.plotter.PlotVRAM
 import org.catinthedark.jvcrplotter.game.ui.EditorRender
@@ -25,14 +25,13 @@ class PlottingScreenState : IState {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     private var time: Float = 0f
-    private val interpreter = Interpreter()
+    private lateinit var interpreter: Interpreter
 
     private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
     private val instructions: List<Operation> by lazy { IOC.atOrFail<List<Operation>>("instructions") }
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
     private lateinit var state: State
     private lateinit var plotState: PlotState
-    private lateinit var intRegistry: InterruptionsRegistry
     private var running: Boolean = true
     private var runError: Boolean = false
     private var errorMessage: String? = ""
@@ -51,9 +50,11 @@ class PlottingScreenState : IState {
         plotState = PlotState(
             PlotVRAM(width = Const.Plotter.WIDTH, height = Const.Plotter.HEIGHT)
         )
-        intRegistry = InterruptionsRegistry(
-            state = state,
-            plotState = plotState
+        interpreter = Interpreter(
+            buildInterruptionsRegistry(
+                state = state,
+                plotState = plotState
+            )
         )
     }
 
@@ -75,11 +76,7 @@ class PlottingScreenState : IState {
     private fun draw() {
         if (running) {
             try {
-                if (state.intCode > 0) {
-                    intRegistry.apply(state.intCode)
-                } else {
-                    running = interpreter.step(state)
-                }
+                running = interpreter.step(state)
                 editor.setCursorPosition(0, state.programCounter)
             } catch (e: Exception) {
                 running = false

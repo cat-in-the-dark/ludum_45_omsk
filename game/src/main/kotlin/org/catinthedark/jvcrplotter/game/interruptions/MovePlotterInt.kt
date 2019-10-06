@@ -17,6 +17,8 @@ class MovePlotterInt(
         val targetX = state.get(X)
         val targetY = state.get(Y)
 
+        logger.info("MOVE toX=$targetX toY=$targetY cX=${plotState.vram.currentX} cY=${plotState.vram.currentY}")
+
         val dx = targetX - plotState.vram.currentX
         val dy = targetY - plotState.vram.currentY
 
