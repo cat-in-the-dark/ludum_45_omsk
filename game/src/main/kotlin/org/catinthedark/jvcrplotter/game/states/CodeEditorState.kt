@@ -23,9 +23,9 @@ import org.slf4j.LoggerFactory
 class CodeEditorState : IState {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
-    private val editor: Editor by lazy { IOC.atOrFail<Editor>("editor") }
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
     private val inputProcessor = Gdx.input.inputProcessor
+    private val editor: Editor by lazy { IOC.atOrFail<Editor>("editor") }
     private val cursorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.CURSOR_FRAME), 6, 6, 6, 6) }
     private val errorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.ERROR_FRAME), 6, 6, 6, 6) }
     private val buttonPanel = ButtonPanel {

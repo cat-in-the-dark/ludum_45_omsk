@@ -113,8 +113,12 @@ class Editor(private val widthInBlocks: Int) {
     }
 
     fun setCursorPosition(x: Int, y: Int) {
-        cursorX = x
-        cursorY = y
+        if (x in 0 until widthInBlocks) {
+            cursorX = x
+        }
+        if (y in 0 until contents.size) {
+            cursorY = y
+        }
     }
 
     private fun toOperation(x: Int, y: Int, val1: Value?, val2: Value?): Operation {

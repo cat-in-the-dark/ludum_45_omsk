@@ -4,16 +4,17 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.scenes.scene2d.Stage
-import org.catinthedark.jvcrplotter.game.Assets
-import org.catinthedark.jvcrplotter.game.Const
+import org.catinthedark.jvcrplotter.game.*
 import org.catinthedark.jvcrplotter.game.asm.Interpreter
 import org.catinthedark.jvcrplotter.game.asm.Operation
 import org.catinthedark.jvcrplotter.game.asm.State
-import org.catinthedark.jvcrplotter.game.at
+import org.catinthedark.jvcrplotter.game.editor.Editor
 import org.catinthedark.jvcrplotter.game.interruptions.InterruptionsRegistry
 import org.catinthedark.jvcrplotter.game.plotter.PlotState
 import org.catinthedark.jvcrplotter.game.plotter.PlotVRAM
+import org.catinthedark.jvcrplotter.game.ui.EditorRender
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.atOrFail
 import org.catinthedark.jvcrplotter.lib.managed
@@ -33,6 +34,11 @@ class PlottingScreenState : IState {
     private lateinit var plotState: PlotState
     private lateinit var intRegistry: InterruptionsRegistry
     private var running: Boolean = true
+    private var runError: Boolean = false
+    private var errorMessage: String? = ""
+    private val editor: Editor by lazy { IOC.atOrFail<Editor>("editor") }
+    private val cursorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.CURSOR_FRAME), 6, 6, 6, 6) }
+    private val errorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.ERROR_FRAME), 6, 6, 6, 6) }
 
     override fun onActivate() {
         logger.info("onActivate")
@@ -74,6 +80,7 @@ class PlottingScreenState : IState {
                 } else {
                     running = interpreter.step(state)
                 }
+                editor.setCursorPosition(0, state.programCounter)
             } catch (e: Exception) {
                 running = false
                 logger.error("FAIL", e)
@@ -90,8 +97,23 @@ class PlottingScreenState : IState {
             it.draw(createPlot(), 10f, 10f, 256f, 256f)
         }
 
+        renderEditorText(editor)
+
         draw()
         draw()
+    }
+
+
+    private fun renderEditorText(editor: Editor) {
+        EditorRender().render(
+            editor,
+            hud.batch,
+            am.font(Assets.Names.FONT_BIG_GREEN),
+            cursorFrame,
+            errorFrame,
+            runError,
+            errorMessage
+        )
     }
 
     override fun onExit() {
