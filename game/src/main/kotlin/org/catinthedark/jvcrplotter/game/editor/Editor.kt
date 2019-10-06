@@ -140,7 +140,7 @@ class Editor(private val widthInBlocks: Int) {
             }
             "MOV" -> MovOp(toMutableOrFail(val1), getOrFail(val2))
             "MUL" -> MulOp(toMutableOrFail(val1), getOrFail(val2))
-            else -> throw InvalidInstructionException("Unsupported iпstruction!")
+            else -> throw InvalidInstructionException("Unsupporteд iпstruction!")
         }
     }
 
@@ -179,7 +179,7 @@ class Editor(private val widthInBlocks: Int) {
                 try {
                     ValueLiteral(valueStr.toInt())
                 } catch (e: NumberFormatException) {
-                    throw InvalidInstructionException("Unable to convert value to literal!", e)
+                    throw InvalidInstructionException("Invaliд address!")
                 }
             }
         }
