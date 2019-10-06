@@ -71,9 +71,32 @@ class ButtonPanel(private val onPressed: (instruction: String, update: Boolean) 
     private val aButton = CompositeButton(1000, 100, Assets.Names.BUTTON, "A", {
         onPressed("A", false)
     })
+    private val unsetPlotButton = IconButton(640, 100, Assets.Names.BUTTON, Assets.Names.ICON_UNSET_PLOT, {
+        onPressed("INT", false)
+        onPressed("42", false)
+    })
+    private val setPlotButton = IconButton(730, 100, Assets.Names.BUTTON, Assets.Names.ICON_SET_PLOT, {
+        onPressed("INT", false)
+        onPressed("43", false)
+    })
+    private val movePlotButton = IconButton(820, 100, Assets.Names.BUTTON, Assets.Names.ICON_MOVE, {
+        onPressed("INT", false)
+        onPressed("44", false)
+    })
 
-    private val instructionButtons =
-        listOf(mulButton, addButton, cmpButton, jlButton, jeButton, jgButton, movButton, jmpButton)
+    private val instructionButtons = listOf(
+        mulButton,
+        addButton,
+        cmpButton,
+        jlButton,
+        jeButton,
+        jgButton,
+        movButton,
+        jmpButton,
+        unsetPlotButton,
+        setPlotButton,
+        movePlotButton
+    )
     private val operandsButtons = listOf(
         xButton,
         yButton,
