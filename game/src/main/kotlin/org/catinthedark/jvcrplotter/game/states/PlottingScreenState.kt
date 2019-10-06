@@ -17,6 +17,7 @@ import org.catinthedark.jvcrplotter.game.interruptions.buildInterruptionsRegistr
 import org.catinthedark.jvcrplotter.game.plotter.PlotState
 import org.catinthedark.jvcrplotter.game.plotter.PlotVRAM
 import org.catinthedark.jvcrplotter.game.plotter.PlotVRAMFromRaw
+import org.catinthedark.jvcrplotter.game.ui.Button
 import org.catinthedark.jvcrplotter.game.ui.CompositeNinePatchButton
 import org.catinthedark.jvcrplotter.game.ui.EditorRender
 import org.catinthedark.jvcrplotter.lib.*
@@ -71,6 +72,12 @@ class PlottingScreenState : IState {
         )
     }
     private lateinit var after: ITimeBarrier
+    private val backBtn = Button(1185,580,1255,655, onClick = {
+        val prevState = IOC.get("previousState")
+        if (prevState != null) {
+            IOC.put("state", prevState)
+        }
+    })
 
     private val compileButton = CompositeNinePatchButton(
         910, 60, 220, 50, Assets.Names.BUTTON_RED,
@@ -155,6 +162,7 @@ class PlottingScreenState : IState {
     override fun onUpdate() {
         time += Gdx.graphics.deltaTime
         compileButton.update()
+        backBtn.update()
 
         hud.batch.managed {
             it.draw(am.at<Texture>(Assets.Names.MONIK), 0f, 0f)

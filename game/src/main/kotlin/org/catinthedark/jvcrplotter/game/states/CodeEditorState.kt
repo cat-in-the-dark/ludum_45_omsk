@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import org.catinthedark.jvcrplotter.game.*
 import org.catinthedark.jvcrplotter.game.Assets.Names.FONT_BIG_GREEN
 import org.catinthedark.jvcrplotter.game.editor.Editor
+import org.catinthedark.jvcrplotter.game.ui.Button
 import org.catinthedark.jvcrplotter.game.ui.ButtonPanel
 import org.catinthedark.jvcrplotter.game.ui.CompositeNinePatchButton
 import org.catinthedark.jvcrplotter.game.ui.EditorRender
@@ -47,6 +48,12 @@ class CodeEditorState : IState {
             }
         }
     }
+    private val backBtn = Button(1185,580,1255,655, onClick = {
+        val prevState = IOC.get("previousState")
+        if (prevState != null) {
+            IOC.put("state", prevState)
+        }
+    })
 
     private val editorRender: EditorRender by lazy {
         EditorRender(
@@ -111,6 +118,7 @@ class CodeEditorState : IState {
         buttonPanel.updateButtons(editorXPos)
         buttonPanel.drawButtons(hud.batch, editorXPos)
 
+        backBtn.update()
         compileButton.update()
         compileButton.draw(hud.batch)
 
