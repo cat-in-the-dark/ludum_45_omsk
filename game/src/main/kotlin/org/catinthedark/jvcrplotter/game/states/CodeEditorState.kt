@@ -105,6 +105,21 @@ class CodeEditorState : IState {
                 if (character in '0'..'9' || (character == '-')) {
                     editor.appendNumberUnderCursor(character)
                 }
+                if (character in listOf('a', 'b', 'x', 'y')) {
+                    editor.setSymbolUnderCursor(character.toString().toUpperCase())
+                    editor.moveCursorRight()
+                }
+            } else {
+                when (character) {
+                    'i' -> {
+                        editor.setSymbolUnderCursor("INT")
+                        editor.moveCursorRight()
+                    }
+                    'm' -> {
+                        editor.setSymbolUnderCursor("MOV")
+                        editor.moveCursorRight()
+                    }
+                }
             }
             return inputProcessor.keyTyped(character)
         }
