@@ -23,6 +23,7 @@ class TutorialState : IState {
             Assets.Names.TUTORIAL1,
             Assets.Names.TUTORIAL2,
             Assets.Names.TUTORIAL3,
+            Assets.Names.TUTORIAL3_5,
             Assets.Names.TUTORIAL4,
             Assets.Names.TUTORIAL5
         )

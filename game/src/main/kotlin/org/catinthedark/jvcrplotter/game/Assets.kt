@@ -134,6 +134,7 @@ object Assets {
         val TUTORIAL1 = "textures/tutorial1.png"
         val TUTORIAL2 = "textures/tutorial2.png"
         val TUTORIAL3 = "textures/tutorial3.png"
+        val TUTORIAL3_5 = "textures/tutorial3_5.png"
         val TUTORIAL4 = "textures/tutorial4.png"
         val TUTORIAL5 = "textures/tutorial5.png"
 
@@ -158,6 +159,7 @@ object Assets {
             TUTORIAL1,
             TUTORIAL2,
             TUTORIAL3,
+            TUTORIAL3_5,
             TUTORIAL4,
             TUTORIAL5
         )
