@@ -75,9 +75,12 @@ class CodeEditorState : IState {
         }
 
         override fun keyTyped(character: Char): Boolean {
+            val posX = editor.getCursorPosition().first
             onKeyTyped(character)
-            if (character in '0'..'9' || (character == '-')) {
-                editor.appendNumberUnderCursor(character)
+            if (posX != 0) {
+                if (character in '0'..'9' || (character == '-')) {
+                    editor.appendNumberUnderCursor(character)
+                }
             }
             return inputProcessor.keyTyped(character)
         }

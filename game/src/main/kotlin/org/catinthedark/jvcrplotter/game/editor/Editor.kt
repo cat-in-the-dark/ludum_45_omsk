@@ -209,7 +209,11 @@ class Editor(private val widthInBlocks: Int) {
                 }
 
                 when (instruction) {
-                    in '0'..'9' -> contents[cursorY][cursorX] = currentVal + instruction
+                    in '0'..'9' -> {
+                        if (currentVal.length <= 3) {
+                            contents[cursorY][cursorX] = currentVal + instruction
+                        }
+                    }
                     else -> contents[cursorY][cursorX] = instruction.toString()
                 }
             } catch (e: Exception) {
