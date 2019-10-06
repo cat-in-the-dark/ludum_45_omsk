@@ -6,9 +6,12 @@ import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.GlyphLayout
+import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import org.catinthedark.jvcrplotter.game.*
-import org.catinthedark.jvcrplotter.game.Assets.Names.FONT_BIG
+import org.catinthedark.jvcrplotter.game.Assets.Names.FONT_BIG_GREEN
 import org.catinthedark.jvcrplotter.game.editor.Editor
 import org.catinthedark.jvcrplotter.game.ui.Button
 import org.catinthedark.jvcrplotter.game.ui.CompositeButton
@@ -24,6 +27,7 @@ class CodeEditorState : IState {
     private val editor: Editor by lazy { IOC.atOrFail<Editor>("editor") }
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
     private val inputProcessor = Gdx.input.inputProcessor
+    private val cursorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.CURSOR_FRAME), 6, 6, 6, 6) }
 
     private val compileButton = Button(1190, 585, 1260, 660, {
         IOC.put("instructions", editor.toInstructions())
@@ -117,16 +121,32 @@ class CodeEditorState : IState {
 
     private fun renderEditorText(editor: Editor) {
         hud.batch.managed { b ->
-            val initX = 80f
+            val layout = GlyphLayout(am.at<BitmapFont>(FONT_BIG_GREEN), "    ")
+            val initX = 100f
             val initY = Const.Screen.HEIGHT.toFloat() - 80f
+            val lineHeight = 35f
+            val symbolWidth = 70f
+
+            val frameOffsetX = 8f
+            val frameOffsetY = 6f
             var yPos = initY
-            val lineHeight = 30f
             editor.getRows().forEach { row ->
-                am.font(FONT_BIG).draw(b, row.joinToString("", transform = {
-                    it.padStart(4, ' ')
-                }), initX, yPos)
+                var xPos = initX
+                row.forEach { symbol ->
+                    am.font(FONT_BIG_GREEN).draw(b, symbol, xPos, yPos)
+                    xPos += symbolWidth
+                }
                 yPos -= lineHeight
             }
+            val pos = editor.getCursorPosition()
+
+            cursorFrame.draw(
+                b,
+                initX + symbolWidth * pos.first - frameOffsetX,
+                initY - lineHeight * (pos.second + 1) + frameOffsetY,
+                layout.width,
+                layout.height + frameOffsetY * 2
+            )
         }
     }
 

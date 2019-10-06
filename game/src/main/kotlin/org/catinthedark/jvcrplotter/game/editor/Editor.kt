@@ -69,6 +69,7 @@ class Editor(private val widthInBlocks: Int) {
         }
 
         cursorY += 1
+        cursorX = 0
 
         logger.info("total lines: ${contents.size}")
     }

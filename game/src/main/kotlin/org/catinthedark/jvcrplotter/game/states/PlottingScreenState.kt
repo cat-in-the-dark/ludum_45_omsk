@@ -10,6 +10,7 @@ import org.catinthedark.jvcrplotter.game.Const
 import org.catinthedark.jvcrplotter.game.asm.Interpreter
 import org.catinthedark.jvcrplotter.game.asm.Operation
 import org.catinthedark.jvcrplotter.game.asm.State
+import org.catinthedark.jvcrplotter.game.at
 import org.catinthedark.jvcrplotter.game.interruptions.InterruptionsRegistry
 import org.catinthedark.jvcrplotter.game.plotter.PlotState
 import org.catinthedark.jvcrplotter.game.plotter.PlotVRAM
@@ -27,7 +28,7 @@ class PlottingScreenState : IState {
 
     private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
     private val instructions: List<Operation> by lazy { IOC.atOrFail<List<Operation>>("instructions") }
-    private val am: AssetManager by lazy { Assets.load() }
+    private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
     private lateinit var state: State
     private lateinit var plotState: PlotState
     private lateinit var intRegistry: InterruptionsRegistry
@@ -85,6 +86,7 @@ class PlottingScreenState : IState {
         time += Gdx.graphics.deltaTime
 
         hud.batch.managed {
+            it.draw(am.at<Texture>(Assets.Names.MONIK), 0f, 0f)
             it.draw(createPlot(), 10f, 10f, 256f, 256f)
         }
 
