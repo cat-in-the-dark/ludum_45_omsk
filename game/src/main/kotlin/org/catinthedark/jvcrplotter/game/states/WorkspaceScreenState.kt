@@ -16,13 +16,13 @@ class WorkspaceScreenState : IState {
     private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
 
-    private val editorBtn = Button(430,330,655,490, onClick = {
+    private val editorBtn = Button(450,175,630,315, onClick = {
         IOC.put("state", States.CODE_EDITOR_SCREEN)
     })
-    private val manPageBtm = Button(70,265, 140, 400, onClick = {
+    private val manPageBtm = Button(50,170, 160, 250, onClick = {
         IOC.put("state", States.MAN_PAGE_SCREEN)
     })
-    private val taskBtm = Button(1155,375, 1245, 460, onClick = {
+    private val taskBtm = Button(1140,310, 1250, 420, onClick = {
         IOC.put("state", States.TASK_SCREEN)
     })
 
@@ -33,9 +33,9 @@ class WorkspaceScreenState : IState {
     override fun onUpdate() {
         hud.batch.managed { b ->
             b.draw(am.texture(Assets.Names.WORKSPACE), 0f, 0f)
-            editorBtn.draw(b, Color.GOLD)
-            manPageBtm.draw(b, Color.GOLD)
-            taskBtm.draw(b, Color.GOLD)
+//            editorBtn.draw(b, Color.GOLD)
+//            manPageBtm.draw(b, Color.GOLD)
+//            taskBtm.draw(b, Color.GOLD)
         }
 
         editorBtn.update()
