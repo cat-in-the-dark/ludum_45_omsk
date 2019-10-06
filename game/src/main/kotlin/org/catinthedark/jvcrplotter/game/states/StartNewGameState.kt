@@ -7,7 +7,20 @@ import org.catinthedark.jvcrplotter.lib.states.IState
 
 class StartNewGameState : IState {
     override fun onActivate() {
-        IOC.put("editor", Editor(3))
+        val editor = Editor(
+            mutableListOf(
+                mutableListOf("MOV", "X", "1"),
+                mutableListOf("MOV", "Y", "1"),
+                mutableListOf("INT", "42", ""),
+                mutableListOf("INT", "44", ""),
+                mutableListOf("MOV", "X", "10"),
+                mutableListOf("MOV", "Y", "20"),
+                mutableListOf("INT", "43", ""),
+                mutableListOf("INT", "44", ""),
+                mutableListOf("JMP", "-9", "")
+            )
+        )
+        IOC.put("editor", editor)
         IOC.put("state", States.CODE_EDITOR_SCREEN)
     }
 

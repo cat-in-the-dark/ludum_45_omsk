@@ -3,37 +3,93 @@ package org.catinthedark.jvcrplotter.game.ui
 import com.badlogic.gdx.graphics.g2d.Batch
 import org.catinthedark.jvcrplotter.game.Assets
 
-class ButtonPanel(private val onPressed: (instruction: String) -> Unit = {}) {
-    private val mulButton = CompositeButton(640, 220, Assets.Names.BUTTON, Assets.Names.BUTTON_INACTIVE, "MUL", {
-        onPressed("MUL")
+class ButtonPanel(private val onPressed: (instruction: String, update: Boolean) -> Unit = { s: String, b: Boolean -> }) {
+    private val movButton = CompositeButton(640, 220, Assets.Names.BUTTON, "MOV", {
+        onPressed("MOV", false)
     })
-    private val addButton = CompositeButton(730, 220, Assets.Names.BUTTON, Assets.Names.BUTTON_INACTIVE, "ADD", {
-        onPressed("ADD")
+    private val addButton = CompositeButton(730, 220, Assets.Names.BUTTON, "ADD", {
+        onPressed("ADD", false)
     })
-    private val cmpButton = CompositeButton(820, 220, Assets.Names.BUTTON, Assets.Names.BUTTON_INACTIVE, "CMP", {
-        onPressed("CMP")
+    private val mulButton = CompositeButton(820, 220, Assets.Names.BUTTON, "MUL", {
+        onPressed("MUL", false)
     })
-    private val intButton = CompositeButton(910, 220, Assets.Names.BUTTON, Assets.Names.BUTTON_INACTIVE, "INT", {
-        onPressed("INT")
+    private val cmpButton = CompositeButton(640, 160, Assets.Names.BUTTON, "CMP", {
+        onPressed("CMP", false)
     })
-    private val jeButton = CompositeButton(1000, 220, Assets.Names.BUTTON, Assets.Names.BUTTON_INACTIVE, "JE", {
-        onPressed("JE")
+    private val jgButton = CompositeButton(730, 160, Assets.Names.BUTTON, "J >", {
+        onPressed("JG", false)
     })
-    private val jgButton = CompositeButton(640, 160, Assets.Names.BUTTON, Assets.Names.BUTTON_INACTIVE, "JG", {
-        onPressed("JG")
+    private val jeButton = CompositeButton(820, 160, Assets.Names.BUTTON, "J =", {
+        onPressed("JE", false)
     })
-    private val xButton = CompositeButton(730, 160, Assets.Names.BUTTON, Assets.Names.BUTTON_INACTIVE, "X", {
-        onPressed("X")
+    private val jlButton = CompositeButton(910, 160, Assets.Names.BUTTON, "J <", {
+        onPressed("JL", false)
     })
-    private val yButton = CompositeButton(820, 160, Assets.Names.BUTTON, Assets.Names.BUTTON_INACTIVE, "Y", {
-        onPressed("Y")
-    })
-    private val movButton = CompositeButton(910, 160, Assets.Names.BUTTON, Assets.Names.BUTTON_INACTIVE, "MOV", {
-        onPressed("MOV")
+    private val jmpButton = CompositeButton(1000, 160, Assets.Names.BUTTON, "JMP", {
+        onPressed("JMP", false)
     })
 
-    private val instructionButtons = listOf(mulButton, addButton, cmpButton, intButton, jeButton, jgButton, movButton)
-    private val operandsButtons = listOf(xButton, yButton)
+    private val oneButton = CompositeButton(640, 220, Assets.Names.BUTTON, "1", {
+        onPressed("1", true)
+    })
+    private val twoButton = CompositeButton(730, 220, Assets.Names.BUTTON, "2", {
+        onPressed("2", true)
+    })
+    private val threeButton = CompositeButton(820, 220, Assets.Names.BUTTON, "3", {
+        onPressed("3", true)
+    })
+    private val minusButton = CompositeButton(910, 220, Assets.Names.BUTTON, "-", {
+        onPressed("-", true)
+    })
+    private val fourButton = CompositeButton(640, 160, Assets.Names.BUTTON, "4", {
+        onPressed("4", true)
+    })
+    private val fiveButton = CompositeButton(730, 160, Assets.Names.BUTTON, "5", {
+        onPressed("5", true)
+    })
+    private val sixButton = CompositeButton(820, 160, Assets.Names.BUTTON, "6", {
+        onPressed("6", true)
+    })
+    private val zeroButton = CompositeButton(910, 160, Assets.Names.BUTTON, "0", {
+        onPressed("0", true)
+    })
+    private val sevenButton = CompositeButton(640, 100, Assets.Names.BUTTON, "7", {
+        onPressed("7", true)
+    })
+    private val eightButton = CompositeButton(730, 100, Assets.Names.BUTTON, "8", {
+        onPressed("8", true)
+    })
+    private val nineButton = CompositeButton(820, 100, Assets.Names.BUTTON, "9", {
+        onPressed("9", true)
+    })
+    private val xButton = CompositeButton(1000, 220, Assets.Names.BUTTON, "X", {
+        onPressed("X", false)
+    })
+    private val yButton = CompositeButton(1000, 160, Assets.Names.BUTTON, "Y", {
+        onPressed("Y", false)
+    })
+    private val aButton = CompositeButton(1000, 100, Assets.Names.BUTTON, "A", {
+        onPressed("A", false)
+    })
+
+    private val instructionButtons =
+        listOf(mulButton, addButton, cmpButton, jlButton, jeButton, jgButton, movButton, jmpButton)
+    private val operandsButtons = listOf(
+        xButton,
+        yButton,
+        aButton,
+        zeroButton,
+        oneButton,
+        twoButton,
+        threeButton,
+        fourButton,
+        fiveButton,
+        sixButton,
+        sevenButton,
+        eightButton,
+        nineButton,
+        minusButton
+    )
 
     fun updateButtons(editorXPos: Int) {
         when (editorXPos) {
@@ -48,21 +104,11 @@ class ButtonPanel(private val onPressed: (instruction: String) -> Unit = {}) {
 
     fun drawButtons(batch: Batch, editorXPos: Int) {
         when (editorXPos) {
-            0 -> {
-                instructionButtons.forEach {
-                    it.drawActive(batch)
-                }
-                operandsButtons.forEach {
-                    it.drawInactive(batch)
-                }
+            0 -> instructionButtons.forEach {
+                it.draw(batch)
             }
-            else -> {
-                instructionButtons.forEach {
-                    it.drawInactive(batch)
-                }
-                operandsButtons.forEach {
-                    it.drawActive(batch)
-                }
+            else -> operandsButtons.forEach {
+                it.draw(batch)
             }
         }
     }

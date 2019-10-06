@@ -8,15 +8,17 @@ import org.catinthedark.jvcrplotter.game.Const
 import org.catinthedark.jvcrplotter.game.editor.Editor
 import org.catinthedark.jvcrplotter.lib.managed
 
-class EditorRender {
+class EditorRender(
+    private val batch: Batch,
+    private val font: BitmapFont,
+    private val frameNinePatch: NinePatch,
+    private val errorNinePatch: NinePatch
+) {
     fun render(
         editor: Editor,
-        batch: Batch,
-        font: BitmapFont,
-        frameNinePatch: NinePatch,
-        errorNinePatch: NinePatch,
         error: Boolean,
-        errorMessage: String?
+        errorMessage: String?,
+        highliteLine: Boolean
     ) {
         batch.managed { b ->
             val errorX = 100f
@@ -46,11 +48,16 @@ class EditorRender {
                 frameNinePatch
             }
 
+            val frameWidth = if (highliteLine) {
+                symbolWidth * 3 + frameOffsetX * 2
+            } else {
+                layout.width
+            }
             frame.draw(
                 b,
                 initX + symbolWidth * pos.first - frameOffsetX,
                 initY - lineHeight * (pos.second + 1) + frameOffsetY,
-                layout.width,
+                frameWidth,
                 layout.height + frameOffsetY * 2
             )
 

@@ -6,8 +6,12 @@ import org.catinthedark.jvcrplotter.game.asm.ops.*
 import org.slf4j.LoggerFactory
 
 class Editor(private val widthInBlocks: Int) {
+    constructor(contents: MutableList<MutableList<String>>) : this(3) {
+        this.contents = contents
+    }
+
     private val logger = LoggerFactory.getLogger(javaClass)
-    private val contents: MutableList<MutableList<String>> = mutableListOf(mutableListOf("", "", ""))
+    private var contents: MutableList<MutableList<String>> = mutableListOf(mutableListOf("", "", ""))
     private var cursorX = 0
     private var cursorY = 0
 
@@ -190,6 +194,26 @@ class Editor(private val widthInBlocks: Int) {
                 } catch (e: NumberFormatException) {
                     throw InvalidInstructionException("ЕГГОГ\nInvaliд address!")
                 }
+            }
+        }
+    }
+
+    fun appendNumberUnderCursor(instruction: Char) {
+        val currentVal = contents[cursorY][cursorX]
+        if (currentVal.isEmpty()) {
+            contents[cursorY][cursorX] = instruction.toString()
+        } else {
+            try {
+                if (currentVal != "-") {
+                    currentVal.toInt()
+                }
+
+                when (instruction) {
+                    in '0'..'9' -> contents[cursorY][cursorX] = currentVal + instruction
+                    else -> contents[cursorY][cursorX] = instruction.toString()
+                }
+            } catch (e: Exception) {
+                contents[cursorY][cursorX] = instruction.toString()
             }
         }
     }

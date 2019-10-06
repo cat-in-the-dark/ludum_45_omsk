@@ -28,9 +28,21 @@ class CodeEditorState : IState {
     private val editor: Editor by lazy { IOC.atOrFail<Editor>("editor") }
     private val cursorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.CURSOR_FRAME), 6, 6, 6, 6) }
     private val errorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.ERROR_FRAME), 6, 6, 6, 6) }
-    private val buttonPanel = ButtonPanel {
-        editor.setSymbolUnderCursor(it)
-        editor.moveCursorRight()
+    private val buttonPanel = ButtonPanel { instruction: String, update: Boolean ->
+        if (update) {
+            editor.appendNumberUnderCursor(instruction[0])
+        } else {
+            editor.setSymbolUnderCursor(instruction)
+            editor.moveCursorRight()
+        }
+    }
+
+    private val editorRender: EditorRender by lazy {
+        EditorRender(
+            hud.batch, am.font(FONT_BIG_GREEN),
+            cursorFrame,
+            errorFrame
+        )
     }
 
     private var compileError = false
@@ -64,8 +76,8 @@ class CodeEditorState : IState {
 
         override fun keyTyped(character: Char): Boolean {
             onKeyTyped(character)
-            if (character in '0'..'9' || (character == '-' && editor.getSymbolUnderCursor().isEmpty())) {
-                editor.setSymbolUnderCursor(editor.getSymbolUnderCursor() + character)
+            if (character in '0'..'9' || (character == '-')) {
+                editor.appendNumberUnderCursor(character)
             }
             return inputProcessor.keyTyped(character)
         }
@@ -96,14 +108,11 @@ class CodeEditorState : IState {
     }
 
     private fun renderEditorText(editor: Editor) {
-        EditorRender().render(
+        editorRender.render(
             editor,
-            hud.batch,
-            am.font(FONT_BIG_GREEN),
-            cursorFrame,
-            errorFrame,
             compileError,
-            errorMessage
+            errorMessage,
+            false
         )
     }
 
