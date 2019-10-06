@@ -19,5 +19,6 @@ object Const {
     object UI {
         const val buttonHeight = 39
         const val buttonWidth = 70
+        const val maxLinesOnScreen = 14
     }
 }

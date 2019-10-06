@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.NinePatch
 import org.catinthedark.jvcrplotter.game.Const
 import org.catinthedark.jvcrplotter.game.editor.Editor
 import org.catinthedark.jvcrplotter.lib.managed
+import kotlin.math.max
+import kotlin.math.min
 
 class EditorRender(
     private val batch: Batch,
@@ -14,25 +16,32 @@ class EditorRender(
     private val frameNinePatch: NinePatch,
     private val errorNinePatch: NinePatch
 ) {
+    private var offset: Int = 0
+    private val errorX = 100f
+    private val errorY = 120f
+    private val layout = GlyphLayout(font, "    ")
+    private val initX = 100f
+    private val initY = Const.Screen.HEIGHT.toFloat() - 80f
+    private val lineHeight = 35f
+    private val symbolWidth = 70f
+
+    private val frameOffsetX = 8f
+    private val frameOffsetY = 6f
+
     fun render(
         editor: Editor,
         error: Boolean,
         errorMessage: String?,
-        highliteLine: Boolean
+        highlightLine: Boolean
     ) {
         batch.managed { b ->
-            val errorX = 100f
-            val errorY = 120f
-            val layout = GlyphLayout(font, "    ")
-            val initX = 100f
-            val initY = Const.Screen.HEIGHT.toFloat() - 80f
-            val lineHeight = 35f
-            val symbolWidth = 70f
-
-            val frameOffsetX = 8f
-            val frameOffsetY = 6f
             var yPos = initY
-            editor.getRows().forEach { row ->
+
+            val pos = editor.getCursorPosition()
+            offset = max(0, pos.second - Const.UI.maxLinesOnScreen)
+            val lastItem = min(editor.getRows().size, Const.UI.maxLinesOnScreen + offset + 1)
+
+            editor.getRows().subList(offset, lastItem).forEach { row ->
                 var xPos = initX
                 row.forEach { symbol ->
                     font.draw(b, symbol, xPos, yPos)
@@ -40,7 +49,6 @@ class EditorRender(
                 }
                 yPos -= lineHeight
             }
-            val pos = editor.getCursorPosition()
 
             val frame = if (error) {
                 errorNinePatch
@@ -48,7 +56,7 @@ class EditorRender(
                 frameNinePatch
             }
 
-            val frameWidth = if (highliteLine) {
+            val frameWidth = if (highlightLine) {
                 symbolWidth * 3 + frameOffsetX * 2
             } else {
                 layout.width
@@ -56,7 +64,7 @@ class EditorRender(
             frame.draw(
                 b,
                 initX + symbolWidth * pos.first - frameOffsetX,
-                initY - lineHeight * (pos.second + 1) + frameOffsetY,
+                initY - lineHeight * (pos.second + 1 - offset) + frameOffsetY,
                 frameWidth,
                 layout.height + frameOffsetY * 2
             )
