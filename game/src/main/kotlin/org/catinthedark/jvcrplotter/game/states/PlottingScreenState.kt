@@ -19,9 +19,7 @@ import org.catinthedark.jvcrplotter.game.plotter.PlotVRAM
 import org.catinthedark.jvcrplotter.game.plotter.PlotVRAMFromRaw
 import org.catinthedark.jvcrplotter.game.ui.CompositeNinePatchButton
 import org.catinthedark.jvcrplotter.game.ui.EditorRender
-import org.catinthedark.jvcrplotter.lib.IOC
-import org.catinthedark.jvcrplotter.lib.atOrFail
-import org.catinthedark.jvcrplotter.lib.managed
+import org.catinthedark.jvcrplotter.lib.*
 import org.catinthedark.jvcrplotter.lib.states.IState
 import org.slf4j.LoggerFactory
 
@@ -29,6 +27,8 @@ private fun createPlot(vram: PlotVRAM): Texture {
     val pixmap = Pixmap(
         Const.Plotter.WIDTH, Const.Plotter.HEIGHT, Pixmap.Format.RGBA8888
     )
+    pixmap.setColor(Color.BLACK)
+    pixmap.fill()
     for (x in 0 until vram.width) {
         for (y in 0 until vram.height) {
             pixmap.drawPixel(x, y, vram.get(x, y).toAbgr())
@@ -70,6 +70,7 @@ class PlottingScreenState : IState {
             errorFrame
         )
     }
+    private lateinit var after: ITimeBarrier
 
     private val compileButton = CompositeNinePatchButton(
         910, 60, 220, 50, Assets.Names.BUTTON_RED,
@@ -81,6 +82,7 @@ class PlottingScreenState : IState {
 
     override fun onActivate() {
         logger.info("onActivate")
+        after = AfterBarrier(1f)
         instructions = IOC.atOrFail("instructions")
         logger.info("Got ${instructions.size} instructions")
         IOC.put("previousState", States.CODE_EDITOR_SCREEN)
@@ -122,7 +124,9 @@ class PlottingScreenState : IState {
             if (plotState.vram.check(task)) {
                 IOC.put("state", States.SUCCESS_SCREEN)
             } else {
-                showErrorPopup(task)
+                after.invoke {
+                    showErrorPopup(task)
+                }
             }
         }
     }
