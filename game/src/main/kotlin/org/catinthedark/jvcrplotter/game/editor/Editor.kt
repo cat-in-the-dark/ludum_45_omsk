@@ -105,6 +105,7 @@ class Editor(private val widthInBlocks: Int) {
     }
 
     fun toInstructions(): List<Operation> {
+        filterEmptyLines()
         val operations = mutableListOf<Operation>()
         for (y in 0 until contents.size) {
             val val1 = toValue(1, y)
@@ -114,6 +115,12 @@ class Editor(private val widthInBlocks: Int) {
         }
 
         return operations
+    }
+
+    private fun filterEmptyLines() {
+        contents = contents.filter { line ->
+            line.any { it.isNotEmpty() }
+        }.toMutableList()
     }
 
     fun setCursorPosition(x: Int, y: Int) {
