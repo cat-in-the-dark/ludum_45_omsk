@@ -60,6 +60,9 @@ class JVCRPlotter : Game() {
                     IOC.put("state", States.TITLE_SCREEN)
                     IOC.put("tutorialShown", false)
                 }
+                if (Gdx.input.isKeyJustPressed(Input.Keys.ALT_LEFT)) {
+                    IOC.put("state", States.SUCCESS_SCREEN)
+                }
                 IOC.atOrFail<InputAdapterHolder>("inputs").update()
             }
             putMixins(

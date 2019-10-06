@@ -27,7 +27,7 @@ class CodeEditorState : IState {
     private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
     private val inputProcessor = Gdx.input.inputProcessor
-    private val editor: Editor by lazy { IOC.atOrFail<Editor>("editor") }
+    private lateinit var editor: Editor
     private val cursorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.CURSOR_FRAME), 6, 6, 6, 6) }
     private val errorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.ERROR_FRAME), 6, 6, 6, 6) }
     private val buttonPanel = ButtonPanel { instruction: String, update: Boolean ->
@@ -81,6 +81,7 @@ class CodeEditorState : IState {
     )
 
     override fun onActivate() {
+        editor = IOC.atOrFail("editor")
         IOC.put("previousState", States.WORKSPACE_SCREEN)
         logger.info("game state activated")
         Gdx.input.inputProcessor = EditorInputAdapter(editor, inputProcessor) {

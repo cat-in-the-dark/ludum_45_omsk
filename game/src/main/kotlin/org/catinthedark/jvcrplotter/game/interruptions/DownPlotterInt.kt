@@ -10,6 +10,9 @@ class DownPlotterInt(
     override val name = "down_plotter"
     override fun apply(): Boolean {
         plotState.isPointerUp = false
+
+        plotState.vram.set(plotState.vram.currentX, plotState.vram.currentY, plotState.pencilColor)
+        
         return true
     }
 }
