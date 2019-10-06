@@ -135,7 +135,7 @@ class CodeEditorState : IState {
     private fun renderEditorText(editor: Editor) {
         hud.batch.managed { b ->
             val errorX = 100f
-            val errorY = 100f
+            val errorY = 120f
             val layout = GlyphLayout(am.at<BitmapFont>(FONT_BIG_GREEN), "    ")
             val initX = 100f
             val initY = Const.Screen.HEIGHT.toFloat() - 80f

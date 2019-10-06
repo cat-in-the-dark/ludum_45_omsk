@@ -140,28 +140,28 @@ class Editor(private val widthInBlocks: Int) {
             }
             "MOV" -> MovOp(toMutableOrFail(val1), getOrFail(val2))
             "MUL" -> MulOp(toMutableOrFail(val1), getOrFail(val2))
-            else -> throw InvalidInstructionException("Unsupporteд iпstruction!")
+            else -> throw InvalidInstructionException("ЕГГОГ\nUnsupporteд iпstruction!")
         }
     }
 
     private fun checkNull(operand: Value?) {
         if (operand != null) {
-            throw InvalidInstructionException("Яedundant operand!")
+            throw InvalidInstructionException("ЕГГОГ\nЯedundant operand!")
         }
     }
 
     private fun getOrFail(operand: Value?): Value {
-        return operand ?: throw InvalidInstructionException("invaliд operand!")
+        return operand ?: throw InvalidInstructionException("ЕГГОГ\ninvaliд operand!")
     }
 
     private fun toMutableOrFail(operand: Value?): MutableValue {
         if (operand == null) {
-            throw InvalidInstructionException("invaliд operand!")
+            throw InvalidInstructionException("ЕГГОГ\ninvaliд operand!")
         }
         if (operand is MutableValue) {
             return operand
         } else {
-            throw InvalidInstructionException("invaliд operand type!")
+            throw InvalidInstructionException("ЕГГОГ\ninvaliд operand type!")
         }
     }
 
@@ -179,7 +179,7 @@ class Editor(private val widthInBlocks: Int) {
                 try {
                     ValueLiteral(valueStr.toInt())
                 } catch (e: NumberFormatException) {
-                    throw InvalidInstructionException("Invaliд address!")
+                    throw InvalidInstructionException("ЕГГОГ\nInvaliд address!")
                 }
             }
         }
