@@ -140,28 +140,28 @@ class Editor(private val widthInBlocks: Int) {
             }
             "MOV" -> MovOp(toMutableOrFail(val1), getOrFail(val2))
             "MUL" -> MulOp(toMutableOrFail(val1), getOrFail(val2))
-            else -> throw InvalidInstructionException("Unsupported instruction $opcode!")
+            else -> throw InvalidInstructionException("Unsupported iпstruction!")
         }
     }
 
     private fun checkNull(operand: Value?) {
         if (operand != null) {
-            throw InvalidInstructionException("Operand should not be here")
+            throw InvalidInstructionException("Яedundant operand!")
         }
     }
 
     private fun getOrFail(operand: Value?): Value {
-        return operand ?: throw InvalidInstructionException("Invalid operand!")
+        return operand ?: throw InvalidInstructionException("invaliд operand!")
     }
 
     private fun toMutableOrFail(operand: Value?): MutableValue {
         if (operand == null) {
-            throw InvalidInstructionException("Invalid operand!")
+            throw InvalidInstructionException("invaliд operand!")
         }
         if (operand is MutableValue) {
             return operand
         } else {
-            throw InvalidInstructionException("Invalid operand type!")
+            throw InvalidInstructionException("invaliд operand type!")
         }
     }
 

@@ -28,10 +28,19 @@ class CodeEditorState : IState {
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
     private val inputProcessor = Gdx.input.inputProcessor
     private val cursorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.CURSOR_FRAME), 6, 6, 6, 6) }
+    private val errorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.ERROR_FRAME), 6, 6, 6, 6) }
+
+    private var compileError = false
+    private var errorMessage: String? = ""
 
     private val compileButton = Button(1190, 585, 1260, 660, {
-        IOC.put("instructions", editor.toInstructions())
-        IOC.put("state", States.PLOTTING_SCREEN)
+        try {
+            IOC.put("instructions", editor.toInstructions())
+            IOC.put("state", States.PLOTTING_SCREEN)
+        } catch (e: Exception) {
+            compileError = true
+            errorMessage = e.message
+        }
     })
 
     private val buttons = listOf(
@@ -75,18 +84,22 @@ class CodeEditorState : IState {
 
     override fun onActivate() {
         logger.info("game state activated")
-        Gdx.input.inputProcessor = EditorInputAdapter(editor, inputProcessor)
+        Gdx.input.inputProcessor = EditorInputAdapter(editor, inputProcessor) {
+            compileError = false
+        }
     }
 
     class EditorInputAdapter(
         private val editor: Editor,
-        private val inputProcessor: InputProcessor
+        private val inputProcessor: InputProcessor,
+        private val onKeyTyped: (character: Char) -> Unit = {}
     ) : InputAdapter() {
         override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
             return inputProcessor.touchDown(screenX, screenY, pointer, button)
         }
 
         override fun keyTyped(character: Char): Boolean {
+            onKeyTyped(character)
             if (character in '0'..'9' || (character == '-' && editor.getSymbolUnderCursor().isEmpty())) {
                 editor.setSymbolUnderCursor(editor.getSymbolUnderCursor() + character)
             }
@@ -121,6 +134,8 @@ class CodeEditorState : IState {
 
     private fun renderEditorText(editor: Editor) {
         hud.batch.managed { b ->
+            val errorX = 100f
+            val errorY = 100f
             val layout = GlyphLayout(am.at<BitmapFont>(FONT_BIG_GREEN), "    ")
             val initX = 100f
             val initY = Const.Screen.HEIGHT.toFloat() - 80f
@@ -140,13 +155,23 @@ class CodeEditorState : IState {
             }
             val pos = editor.getCursorPosition()
 
-            cursorFrame.draw(
+            val frame = if (compileError) {
+                errorFrame
+            } else {
+                cursorFrame
+            }
+
+            frame.draw(
                 b,
                 initX + symbolWidth * pos.first - frameOffsetX,
                 initY - lineHeight * (pos.second + 1) + frameOffsetY,
                 layout.width,
                 layout.height + frameOffsetY * 2
             )
+
+            if (compileError) {
+                am.font(FONT_BIG_GREEN).draw(b, errorMessage, errorX, errorY)
+            }
         }
     }
 
