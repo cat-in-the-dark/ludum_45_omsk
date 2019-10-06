@@ -31,6 +31,14 @@ class CodeEditorState : IState {
     private val buttonPanel = ButtonPanel { instruction: String, update: Boolean ->
         if (update) {
             editor.appendNumberUnderCursor(instruction[0])
+        } else if (instruction == "\n") {
+            editor.setSymbolUnderCursor("")
+            val pos = editor.getCursorPosition()
+            if (pos.second == editor.getRows().size - 1) {
+                editor.insertNewLine()
+            }
+
+            editor.setCursorPosition(0, pos.second + 1)
         } else {
             editor.setSymbolUnderCursor(instruction)
             editor.moveCursorRight()

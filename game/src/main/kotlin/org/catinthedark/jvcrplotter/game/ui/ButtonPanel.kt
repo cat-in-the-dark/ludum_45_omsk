@@ -74,14 +74,17 @@ class ButtonPanel(private val onPressed: (instruction: String, update: Boolean) 
     private val unsetPlotButton = IconButton(640, 100, Assets.Names.BUTTON, Assets.Names.ICON_UNSET_PLOT, {
         onPressed("INT", false)
         onPressed("42", false)
+        onPressed("\n", false)
     })
     private val setPlotButton = IconButton(730, 100, Assets.Names.BUTTON, Assets.Names.ICON_SET_PLOT, {
         onPressed("INT", false)
         onPressed("43", false)
+        onPressed("\n", false)
     })
     private val movePlotButton = IconButton(820, 100, Assets.Names.BUTTON, Assets.Names.ICON_MOVE, {
         onPressed("INT", false)
         onPressed("44", false)
+        onPressed("\n", false)
     })
 
     private val instructionButtons = listOf(
