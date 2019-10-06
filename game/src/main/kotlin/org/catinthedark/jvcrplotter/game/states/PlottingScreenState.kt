@@ -16,35 +16,13 @@ import org.catinthedark.jvcrplotter.game.editor.Editor
 import org.catinthedark.jvcrplotter.game.interruptions.buildInterruptionsRegistry
 import org.catinthedark.jvcrplotter.game.plotter.PlotState
 import org.catinthedark.jvcrplotter.game.plotter.PlotVRAM
-import org.catinthedark.jvcrplotter.game.plotter.PlotVRAMFromRaw
+import org.catinthedark.jvcrplotter.game.plotter.createPlot
 import org.catinthedark.jvcrplotter.game.ui.Button
 import org.catinthedark.jvcrplotter.game.ui.CompositeNinePatchButton
 import org.catinthedark.jvcrplotter.game.ui.EditorRender
 import org.catinthedark.jvcrplotter.lib.*
 import org.catinthedark.jvcrplotter.lib.states.IState
 import org.slf4j.LoggerFactory
-
-private fun createPlot(vram: PlotVRAM): Texture {
-    val pixmap = Pixmap(
-        Const.Plotter.WIDTH, Const.Plotter.HEIGHT, Pixmap.Format.RGBA8888
-    )
-    pixmap.setColor(Color.BLACK)
-    pixmap.fill()
-    for (x in 0 until vram.width) {
-        for (y in 0 until vram.height) {
-            pixmap.drawPixel(x, y, vram.get(x, y).toAbgr())
-        }
-    }
-
-    val tex = Texture(pixmap)
-    pixmap.dispose()
-    return tex
-}
-
-private fun createPlot(raw: List<List<Int>>): Texture {
-    val vram = PlotVRAMFromRaw(raw, Const.Plotter.COLOR)
-    return createPlot(vram)
-}
 
 class PlottingScreenState : IState {
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -72,7 +50,7 @@ class PlottingScreenState : IState {
         )
     }
     private lateinit var after: ITimeBarrier
-    private val backBtn = Button(1185,580,1255,655, onClick = {
+    private val backBtn = Button(1185, 580, 1255, 655, onClick = {
         val prevState = IOC.get("previousState")
         if (prevState != null) {
             IOC.put("state", prevState)
@@ -129,7 +107,9 @@ class PlottingScreenState : IState {
             val taskId: Int = IOC.atOrFail("currentTaskId")
             val task = Tasks.tasks[taskId]
             if (plotState.vram.check(task)) {
-                IOC.put("state", States.SUCCESS_SCREEN)
+                after.invoke {
+                    IOC.put("state", States.SUCCESS_SCREEN)
+                }
             } else {
                 after.invoke {
                     showErrorPopup(task)
@@ -139,7 +119,7 @@ class PlottingScreenState : IState {
     }
 
     private fun showErrorPopup(task: List<List<Int>>) {
-        val w = 352+352+8+20+20
+        val w = 352 + 352 + 8 + 20 + 20
         val h = 430
         val pixmap = Pixmap(w, h, Pixmap.Format.RGBA8888)
         pixmap.setColor(Color.CYAN)
@@ -153,9 +133,8 @@ class PlottingScreenState : IState {
         hud.batch.managed {
             it.draw(tex, 300f, 150f)
             font.draw(it, "ОБНАРУЖЕНО НЕСОВПАДЕНИЕ", 320f, 570f)
-
-            it.draw(got, 320f, 170f, 352f,352f)
-            it.draw(expected, 320f + 352f + 8f, 170f, 352f,352f)
+            it.draw(got, 320f, 170f, 352f, 352f)
+            it.draw(expected, 320f + 352f + 8f, 170f, 352f, 352f)
         }
     }
 
