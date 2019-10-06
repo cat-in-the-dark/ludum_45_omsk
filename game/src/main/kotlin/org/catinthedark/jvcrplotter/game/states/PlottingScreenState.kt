@@ -29,7 +29,7 @@ class PlottingScreenState : IState {
     private lateinit var interpreter: Interpreter
 
     private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
-    private val instructions: List<Operation> by lazy { IOC.atOrFail<List<Operation>>("instructions") }
+    private var instructions: List<Operation> = listOf()
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
     private lateinit var state: State
     private lateinit var plotState: PlotState
@@ -57,6 +57,8 @@ class PlottingScreenState : IState {
 
     override fun onActivate() {
         logger.info("onActivate")
+        instructions = IOC.atOrFail("instructions")
+        logger.info("Got ${instructions.size} instructions")
         IOC.put("previousState", States.CODE_EDITOR_SCREEN)
         time = 0f
         running = true
