@@ -115,7 +115,7 @@ object Assets {
         val FONT_MEDIUM_MONOSPACE_BLACK = "font_medium_monospace_black.ttf"
 
         val LOGO = "textures/title.png"
-        val TITLE = "textures/title.png"
+        val TITLE = "textures/art.png"
         val MONIK = "textures/monik.png"
         val BUTTON = "textures/knopka.png"
         val BUTTON_RED = "textures/knopka_red.png"
