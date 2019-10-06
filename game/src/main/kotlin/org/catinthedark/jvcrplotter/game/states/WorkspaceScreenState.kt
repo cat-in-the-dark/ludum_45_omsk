@@ -1,7 +1,6 @@
 package org.catinthedark.jvcrplotter.game.states
 
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Stage
 import org.catinthedark.jvcrplotter.game.Assets
 import org.catinthedark.jvcrplotter.game.States
@@ -16,21 +15,21 @@ class WorkspaceScreenState : IState {
     private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
 
-    private val editorBtn = Button(450,175,630,315, onClick = {
+    private val editorBtn = Button(450, 175, 630, 315, onClick = {
         IOC.put("state", States.CODE_EDITOR_SCREEN)
     }, onHover = {
         hud.batch.managed {
             it.draw(am.texture(Assets.Names.EDITOR), 450f, 175f)
         }
     })
-    private val manPageBtm = Button(50,170, 160, 250, onClick = {
-        IOC.put("state", States.MAN_PAGE_SCREEN)
+    private val manPageBtm = Button(50, 170, 160, 250, onClick = {
+        IOC.put("state", States.TUTORIAL_STATE)
     }, onHover = {
         hud.batch.managed {
             it.draw(am.texture(Assets.Names.MAN), 99f, 171f)
         }
     })
-    private val taskBtm = Button(1140,310, 1250, 420, onClick = {
+    private val taskBtm = Button(1140, 310, 1250, 420, onClick = {
         IOC.put("state", States.TASK_SCREEN)
     }, onHover = {
         hud.batch.managed {

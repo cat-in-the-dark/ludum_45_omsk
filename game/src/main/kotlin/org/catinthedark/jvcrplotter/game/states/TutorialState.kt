@@ -32,7 +32,7 @@ class TutorialState : IState {
     private var currentTime = 0f
 
     override fun onActivate() {
-
+        tutIdx = 0
     }
 
     override fun onUpdate() {
@@ -51,7 +51,7 @@ class TutorialState : IState {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             tutIdx += 1
             if (tutIdx == tutorials.size) {
-                IOC.put("state", States.START_NEW_GAME_STATE)
+                IOC.put("state", States.WORKSPACE_SCREEN)
             }
         }
     }

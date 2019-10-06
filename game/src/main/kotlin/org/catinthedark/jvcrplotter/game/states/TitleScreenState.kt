@@ -38,7 +38,7 @@ class TitleScreenState : IState {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            IOC.put("state", States.TUTORIAL_STATE)
+            IOC.put("state", States.START_NEW_GAME_STATE)
         }
     }
 
