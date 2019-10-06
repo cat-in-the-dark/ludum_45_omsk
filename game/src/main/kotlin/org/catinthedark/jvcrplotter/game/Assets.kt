@@ -118,6 +118,7 @@ object Assets {
         val TITLE = "textures/title.png"
         val MONIK = "textures/monik.png"
         val BUTTON = "textures/knopka.png"
+        val BUTTON_RED = "textures/knopka_red.png"
         val ICON_MOVE = "textures/icon_move.png"
         val ICON_UNSET_PLOT = "textures/icon_unset_plot.png"
         val ICON_SET_PLOT = "textures/icon_set_plot.png"
@@ -132,6 +133,7 @@ object Assets {
             TITLE,
             MONIK,
             BUTTON,
+            BUTTON_RED,
             BUTTON_INACTIVE,
             CURSOR_FRAME,
             ERROR_FRAME,

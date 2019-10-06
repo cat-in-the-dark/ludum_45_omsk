@@ -7,12 +7,13 @@ import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.NinePatch
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.scenes.scene2d.Stage
 import org.catinthedark.jvcrplotter.game.*
 import org.catinthedark.jvcrplotter.game.Assets.Names.FONT_BIG_GREEN
 import org.catinthedark.jvcrplotter.game.editor.Editor
-import org.catinthedark.jvcrplotter.game.ui.Button
 import org.catinthedark.jvcrplotter.game.ui.ButtonPanel
+import org.catinthedark.jvcrplotter.game.ui.CompositeNinePatchButton
 import org.catinthedark.jvcrplotter.game.ui.EditorRender
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.atOrFail
@@ -29,19 +30,21 @@ class CodeEditorState : IState {
     private val cursorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.CURSOR_FRAME), 6, 6, 6, 6) }
     private val errorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.ERROR_FRAME), 6, 6, 6, 6) }
     private val buttonPanel = ButtonPanel { instruction: String, update: Boolean ->
-        if (update) {
-            editor.appendNumberUnderCursor(instruction[0])
-        } else if (instruction == "\n") {
-            editor.setSymbolUnderCursor("")
-            val pos = editor.getCursorPosition()
-            if (pos.second == editor.getRows().size - 1) {
-                editor.insertNewLine()
-            }
+        when {
+            update -> editor.appendNumberUnderCursor(instruction[0])
+            instruction == "\n" -> {
+                editor.setSymbolUnderCursor("")
+                val pos = editor.getCursorPosition()
+                if (pos.second == editor.getRows().size - 1) {
+                    editor.insertNewLine()
+                }
 
-            editor.setCursorPosition(0, pos.second + 1)
-        } else {
-            editor.setSymbolUnderCursor(instruction)
-            editor.moveCursorRight()
+                editor.setCursorPosition(0, pos.second + 1)
+            }
+            else -> {
+                editor.setSymbolUnderCursor(instruction)
+                editor.moveCursorRight()
+            }
         }
     }
 
@@ -56,15 +59,20 @@ class CodeEditorState : IState {
     private var compileError = false
     private var errorMessage: String? = ""
 
-    private val compileButton = Button(1190, 585, 1260, 660, {
-        try {
-            IOC.put("instructions", editor.toInstructions())
-            IOC.put("state", States.PLOTTING_SCREEN)
-        } catch (e: Exception) {
-            compileError = true
-            errorMessage = e.message
+    private val compileButton = CompositeNinePatchButton(
+        910, 60, 220, 50, Assets.Names.BUTTON_RED,
+        Rectangle(20f, 15f, 20f, 15f),
+        "ПУСК", {
+            try {
+                IOC.put("instructions", editor.toInstructions())
+                IOC.put("state", States.PLOTTING_SCREEN)
+            } catch (e: Exception) {
+                compileError = true
+                errorMessage = e.message
+            }
         }
-    })
+    )
+
 
     override fun onActivate() {
         IOC.put("previousState", States.WORKSPACE_SCREEN)
@@ -105,6 +113,7 @@ class CodeEditorState : IState {
         buttonPanel.drawButtons(hud.batch, editorXPos)
 
         compileButton.update()
+        compileButton.draw(hud.batch)
 
         when {
             Gdx.input.isKeyJustPressed(Input.Keys.UP) -> editor.moveCursorUp()
