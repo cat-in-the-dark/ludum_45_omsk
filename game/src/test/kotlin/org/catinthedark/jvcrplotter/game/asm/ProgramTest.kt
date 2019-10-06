@@ -18,7 +18,7 @@ class ProgramTest {
         )
         val interpreter = Interpreter()
         while (interpreter.step(state)) {
-            state.print()
+
         }
 
         Assert.assertEquals(15, state.registers[X])
@@ -38,7 +38,7 @@ class ProgramTest {
         )
         val interpreter = Interpreter()
         while (interpreter.step(state)) {
-            state.print()
+
         }
 
         Assert.assertEquals(2, state.registers[X])
@@ -62,7 +62,7 @@ class ProgramTest {
         )
         val interpreter = Interpreter()
         while (interpreter.step(state)) {
-            state.print()
+
         }
 
         Assert.assertEquals(32, state.registers[Y])
