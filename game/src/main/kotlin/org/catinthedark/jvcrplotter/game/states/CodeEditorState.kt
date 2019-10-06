@@ -73,7 +73,6 @@ class CodeEditorState : IState {
         }
     )
 
-
     override fun onActivate() {
         IOC.put("previousState", States.WORKSPACE_SCREEN)
         logger.info("game state activated")

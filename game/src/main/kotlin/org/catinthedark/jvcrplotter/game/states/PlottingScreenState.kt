@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.NinePatch
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.scenes.scene2d.Stage
 import org.catinthedark.jvcrplotter.game.*
 import org.catinthedark.jvcrplotter.game.asm.Interpreter
@@ -14,6 +15,7 @@ import org.catinthedark.jvcrplotter.game.editor.Editor
 import org.catinthedark.jvcrplotter.game.interruptions.buildInterruptionsRegistry
 import org.catinthedark.jvcrplotter.game.plotter.PlotState
 import org.catinthedark.jvcrplotter.game.plotter.PlotVRAM
+import org.catinthedark.jvcrplotter.game.ui.CompositeNinePatchButton
 import org.catinthedark.jvcrplotter.game.ui.EditorRender
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.atOrFail
@@ -44,6 +46,14 @@ class PlottingScreenState : IState {
             errorFrame
         )
     }
+
+    private val compileButton = CompositeNinePatchButton(
+        910, 60, 220, 50, Assets.Names.BUTTON_RED,
+        Rectangle(20f, 15f, 20f, 15f),
+        "ПРЕРВАТЬ", {
+            IOC.put("state", States.CODE_EDITOR_SCREEN)
+        }
+    )
 
     override fun onActivate() {
         logger.info("onActivate")
@@ -95,6 +105,7 @@ class PlottingScreenState : IState {
 
     override fun onUpdate() {
         time += Gdx.graphics.deltaTime
+        compileButton.update()
 
         hud.batch.managed {
             it.draw(am.at<Texture>(Assets.Names.MONIK), 0f, 0f)
@@ -102,6 +113,7 @@ class PlottingScreenState : IState {
         }
 
         renderEditorText(editor)
+        compileButton.draw(hud.batch)
 
         draw()
     }
