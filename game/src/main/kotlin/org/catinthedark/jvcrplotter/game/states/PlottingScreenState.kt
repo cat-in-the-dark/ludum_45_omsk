@@ -2,6 +2,7 @@ package org.catinthedark.jvcrplotter.game.states
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.NinePatch
@@ -67,7 +68,8 @@ class PlottingScreenState : IState {
             instructions = instructions
         )
         plotState = PlotState(
-            PlotVRAM(width = Const.Plotter.WIDTH, height = Const.Plotter.HEIGHT)
+            PlotVRAM(width = Const.Plotter.WIDTH, height = Const.Plotter.HEIGHT),
+            pencilColor = Color(0x00d410ff)
         )
         interpreter = Interpreter(
             buildInterruptionsRegistry(
@@ -83,7 +85,7 @@ class PlottingScreenState : IState {
         )
         for (x in 0..plotState.vram.width) {
             for (y in 0..plotState.vram.height) {
-                pixmap.drawPixel(x, y, plotState.vram.get(x, y))
+                pixmap.drawPixel(x, y, plotState.vram.get(x, y).toAbgr())
             }
         }
 
@@ -111,7 +113,7 @@ class PlottingScreenState : IState {
 
         hud.batch.managed {
             it.draw(am.at<Texture>(Assets.Names.MONIK), 0f, 0f)
-            it.draw(createPlot(), 10f, 10f, 256f, 256f)
+            it.draw(createPlot(), 700f, 310f, 352f, 352f)
         }
 
         renderEditorText(editor)

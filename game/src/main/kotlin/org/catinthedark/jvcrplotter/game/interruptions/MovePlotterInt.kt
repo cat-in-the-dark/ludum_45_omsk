@@ -33,7 +33,7 @@ class MovePlotterInt(
         if (plotState.isPointerUp) {
             plotState.vram.set(x, y) // just move
         } else {
-            plotState.vram.set(x, y, plotState.color)
+            plotState.vram.set(x, y, plotState.pencilColor)
         }
 
         return false

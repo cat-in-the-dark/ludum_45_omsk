@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color
 data class PlotState(
     val vram: PlotVRAM,
     var isPointerUp: Boolean = true,
-    var color: Color = Color.BLUE
+    var pencilColor: Color = Color.BLUE
 )
 
 data class PlotVRAM(
@@ -18,7 +18,7 @@ data class PlotVRAM(
         private set
     private val vram: List<MutableList<Color>> = List(width) {
         MutableList(height) {
-            Color.WHITE
+            Color(0f, 0f, 0f, 0f)
         }
     }
 
@@ -37,7 +37,7 @@ data class PlotVRAM(
         return vram[x.coerceIn(0, width - 1)][y.coerceIn(0, height - 1)]
     }
 
-    fun get(x: Int, y: Int): Int {
-        return getC(x, y).toIntBits()
+    fun get(x: Int, y: Int): Color {
+        return getC(x, y)
     }
 }
