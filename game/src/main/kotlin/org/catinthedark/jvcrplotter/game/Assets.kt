@@ -118,6 +118,7 @@ object Assets {
         val TITLE = "textures/title.png"
         val MONIK = "textures/monik.png"
         val BUTTON = "textures/knopka.png"
+        val BUTTON_INACTIVE = "textures/knopka_inactive.png"
         val CURSOR_FRAME = "textures/frame_9.png"
         val ERROR_FRAME = "textures/frame_red_9.png"
 
@@ -126,6 +127,7 @@ object Assets {
             TITLE,
             MONIK,
             BUTTON,
+            BUTTON_INACTIVE,
             CURSOR_FRAME,
             ERROR_FRAME
         )

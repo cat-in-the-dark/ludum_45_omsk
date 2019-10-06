@@ -6,15 +6,14 @@ import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import org.catinthedark.jvcrplotter.game.*
 import org.catinthedark.jvcrplotter.game.Assets.Names.FONT_BIG_GREEN
 import org.catinthedark.jvcrplotter.game.editor.Editor
 import org.catinthedark.jvcrplotter.game.ui.Button
-import org.catinthedark.jvcrplotter.game.ui.CompositeButton
+import org.catinthedark.jvcrplotter.game.ui.ButtonPanel
+import org.catinthedark.jvcrplotter.game.ui.EditorRender
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.atOrFail
 import org.catinthedark.jvcrplotter.lib.managed
@@ -29,6 +28,10 @@ class CodeEditorState : IState {
     private val inputProcessor = Gdx.input.inputProcessor
     private val cursorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.CURSOR_FRAME), 6, 6, 6, 6) }
     private val errorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.ERROR_FRAME), 6, 6, 6, 6) }
+    private val buttonPanel = ButtonPanel {
+        editor.setSymbolUnderCursor(it)
+        editor.moveCursorRight()
+    }
 
     private var compileError = false
     private var errorMessage: String? = ""
@@ -42,45 +45,6 @@ class CodeEditorState : IState {
             errorMessage = e.message
         }
     })
-
-    private val buttons = listOf(
-        CompositeButton(640, 220, Assets.Names.BUTTON, "MUL", {
-            editor.setSymbolUnderCursor("MUL")
-            editor.moveCursorRight()
-        }),
-        CompositeButton(730, 220, Assets.Names.BUTTON, "ADD", {
-            editor.setSymbolUnderCursor("ADD")
-            editor.moveCursorRight()
-        }),
-        CompositeButton(820, 220, Assets.Names.BUTTON, "CMP", {
-            editor.setSymbolUnderCursor("CMP")
-            editor.moveCursorRight()
-        }),
-        CompositeButton(910, 220, Assets.Names.BUTTON, "INT", {
-            editor.setSymbolUnderCursor("INT")
-            editor.moveCursorRight()
-        }),
-        CompositeButton(1000, 220, Assets.Names.BUTTON, "JE", {
-            editor.setSymbolUnderCursor("JE")
-            editor.moveCursorRight()
-        }),
-        CompositeButton(640, 160, Assets.Names.BUTTON, "JG", {
-            editor.setSymbolUnderCursor("JG")
-            editor.moveCursorRight()
-        }),
-        CompositeButton(730, 160, Assets.Names.BUTTON, "X", {
-            editor.setSymbolUnderCursor("X")
-            editor.moveCursorRight()
-        }),
-        CompositeButton(820, 160, Assets.Names.BUTTON, "Y", {
-            editor.setSymbolUnderCursor("Y")
-            editor.moveCursorRight()
-        }),
-        CompositeButton(910, 160, Assets.Names.BUTTON, "MOV", {
-            editor.setSymbolUnderCursor("MOV")
-            editor.moveCursorRight()
-        })
-    )
 
     override fun onActivate() {
         logger.info("game state activated")
@@ -112,12 +76,11 @@ class CodeEditorState : IState {
             it.draw(am.at<Texture>(Assets.Names.MONIK), 0f, 0f)
         }
 
-        compileButton.update()
+        val editorXPos = editor.getCursorPosition().first
+        buttonPanel.updateButtons(editorXPos)
+        buttonPanel.drawButtons(hud.batch, editorXPos)
 
-        buttons.forEach {
-            it.update()
-            it.draw(hud.batch)
-        }
+        compileButton.update()
 
         when {
             Gdx.input.isKeyJustPressed(Input.Keys.UP) -> editor.moveCursorUp()
@@ -133,46 +96,15 @@ class CodeEditorState : IState {
     }
 
     private fun renderEditorText(editor: Editor) {
-        hud.batch.managed { b ->
-            val errorX = 100f
-            val errorY = 120f
-            val layout = GlyphLayout(am.at<BitmapFont>(FONT_BIG_GREEN), "    ")
-            val initX = 100f
-            val initY = Const.Screen.HEIGHT.toFloat() - 80f
-            val lineHeight = 35f
-            val symbolWidth = 70f
-
-            val frameOffsetX = 8f
-            val frameOffsetY = 6f
-            var yPos = initY
-            editor.getRows().forEach { row ->
-                var xPos = initX
-                row.forEach { symbol ->
-                    am.font(FONT_BIG_GREEN).draw(b, symbol, xPos, yPos)
-                    xPos += symbolWidth
-                }
-                yPos -= lineHeight
-            }
-            val pos = editor.getCursorPosition()
-
-            val frame = if (compileError) {
-                errorFrame
-            } else {
-                cursorFrame
-            }
-
-            frame.draw(
-                b,
-                initX + symbolWidth * pos.first - frameOffsetX,
-                initY - lineHeight * (pos.second + 1) + frameOffsetY,
-                layout.width,
-                layout.height + frameOffsetY * 2
-            )
-
-            if (compileError) {
-                am.font(FONT_BIG_GREEN).draw(b, errorMessage, errorX, errorY)
-            }
-        }
+        EditorRender().render(
+            editor,
+            hud.batch,
+            am.font(FONT_BIG_GREEN),
+            cursorFrame,
+            errorFrame,
+            compileError,
+            errorMessage
+        )
     }
 
     override fun onExit() {
