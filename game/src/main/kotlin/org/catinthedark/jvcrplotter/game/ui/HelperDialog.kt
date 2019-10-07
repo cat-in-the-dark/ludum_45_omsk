@@ -30,11 +30,12 @@ class HelperDialog(
     val width: Int,
     val height: Int,
     private val text: String,
-    private val closesAt: String? = null
+    private val closesAt: String? = null,
+    private val initiallyClosed: Boolean = false
 ) : IDialog() {
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
     private var shouldClose: Boolean = false
-    var isClosed = false
+    var isClosed = initiallyClosed
         private set
     private val framePatch: NinePatch by lazy {
         NinePatch(
@@ -57,6 +58,11 @@ class HelperDialog(
             shouldClose = true
         }
     )
+
+    fun reset() {
+        shouldClose = false
+        isClosed = false
+    }
 
     override fun draw(batch: Batch) {
         if (isClosed) return

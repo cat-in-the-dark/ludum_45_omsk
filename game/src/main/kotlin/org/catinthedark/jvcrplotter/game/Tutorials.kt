@@ -101,7 +101,7 @@ private val howToFixDialog = HelperDialog(
 )
 
 private val wellDoneDialog = HelperDialog(
-    700, 270, 480, 300,
+    600, 270, 520, 300,
     "Well done, comrade!\n" +
         "You have a new assignment\n" +
         "Check it here"

@@ -6,6 +6,7 @@ import org.catinthedark.jvcrplotter.game.Assets
 import org.catinthedark.jvcrplotter.game.States
 import org.catinthedark.jvcrplotter.game.texture
 import org.catinthedark.jvcrplotter.game.ui.Button
+import org.catinthedark.jvcrplotter.game.ui.HelperDialog
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.atOrFail
 import org.catinthedark.jvcrplotter.lib.managed
@@ -22,8 +23,13 @@ class WorkspaceScreenState : IState {
             it.draw(am.texture(Assets.Names.EDITOR), 450f, 175f)
         }
     })
+    private val manPageDialog = HelperDialog(
+        55, 270, 530, 120,
+        "Manual will be here soon",
+        initiallyClosed = true
+    )
     private val manPageBtm = Button(50, 170, 160, 250, onClick = {
-        IOC.put("state", States.TUTORIAL_STATE)
+        manPageDialog.reset()
     }, onHover = {
         hud.batch.managed {
             it.draw(am.texture(Assets.Names.MAN), 99f, 171f)
@@ -52,6 +58,7 @@ class WorkspaceScreenState : IState {
         editorBtn.update()
         manPageBtm.update()
         taskBtm.update()
+        manPageDialog.updateAndDraw(hud.batch)
     }
 
     override fun onExit() {
