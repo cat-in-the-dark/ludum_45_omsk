@@ -56,6 +56,18 @@ class PlottingScreenState : IState {
             IOC.put("state", prevState)
         }
     })
+    private val popupBgTexture: Texture by lazy { createPopupBgTexture() }
+
+    private fun createPopupBgTexture(): Texture {
+        val w = 352 + 352 + 8 + 20 + 20
+        val h = 430
+        val pixmap = Pixmap(w, h, Pixmap.Format.RGBA8888)
+        pixmap.setColor(Color.CYAN)
+        pixmap.fill()
+        val tex = Texture(pixmap)
+        pixmap.dispose()
+        return tex
+    }
 
     private val compileButton = CompositeNinePatchButton(
         910, 60, 220, 50, Assets.Names.BUTTON_RED,
@@ -120,19 +132,11 @@ class PlottingScreenState : IState {
     }
 
     private fun showErrorPopup(task: List<List<Int>>) {
-        val w = 352 + 352 + 8 + 20 + 20
-        val h = 430
-        val pixmap = Pixmap(w, h, Pixmap.Format.RGBA8888)
-        pixmap.setColor(Color.CYAN)
-        pixmap.fill()
-        val tex = Texture(pixmap)
-        pixmap.dispose()
-
         val got = createPlot(plotState.vram)
         val expected = createPlot(task)
 
         hud.batch.managed {
-            it.draw(tex, 300f, 150f)
+            it.draw(popupBgTexture, 300f, 150f)
             font.draw(it, "ОБНАРУЖЕНО НЕСОВПАДЕНИЕ", 320f, 570f)
             it.draw(got, 320f, 170f, 352f, 352f)
             it.draw(expected, 320f + 352f + 8f, 170f, 352f, 352f)
