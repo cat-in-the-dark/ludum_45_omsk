@@ -10,6 +10,24 @@ import org.catinthedark.jvcrplotter.lib.AfterBarrier
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.managed
 
+val quickHelpText = "" +
+    "   Quick manual\n" +
+    "Registers: X, Y, A, B\n" +
+    "INT X - control burner:\n" +
+    "  X = 42 - raise head\n" +
+    "  X = 43 - lower head\n" +
+    "  X = 44 - move head to\n" +
+    "    (X:Y) (registers)\n" +
+    "MOV A B - put B in A\n" +
+    "ADD A B - put A + B in A\n" +
+    "JML C - jump (C + 1)\n" +
+    "  lines up or down\n" +
+    "CMP A B - compare A\n" +
+    "  with B\n" +
+    "JG/JE/JL C - jump if CMP\n" +
+    "  result is <, = or > 0"
+
+
 private val welcomeDialog = HelperDialog(
     640, 270, 500, 300,
     "Welcome to [RED]VychVyzhProm[],\n" +
@@ -88,7 +106,7 @@ private val howToInput2Dialog = HelperDialog(
 
 private val somethingWentWrongDialog = HelperDialog(
     400, 450, 490, 250,
-    "Hmm.. Something is wrong\n" +
+    "Hmm.. Something is wrong.\n" +
         "See that last pixel?\n" +
         "Press [RED]прервать[] button\n" +
         "to go back to editing",
@@ -96,8 +114,11 @@ private val somethingWentWrongDialog = HelperDialog(
 )
 
 private val howToFixDialog = HelperDialog(
-    290, 300, 530, 120,
-    "Can you fix this code?"
+    290, 350, 530, 300,
+    "Can you fix this code?\n" +
+        "You can always take a look\n" +
+        "at the quick help pressing\n" +
+        "this button"
 )
 
 private val wellDoneDialog = HelperDialog(
@@ -110,6 +131,7 @@ private val wellDoneDialog = HelperDialog(
 val codeEditorTutorial = {
     val currentTaskId: Int by IOC
     val hud: Stage by IOC
+    val assetManager: AssetManager by IOC
     when (currentTaskId) {
         0 -> {
             thisIsControllerDialog.updateAndDraw(hud.batch)
@@ -121,12 +143,22 @@ val codeEditorTutorial = {
                         howToInputDialog.updateAndDraw(hud.batch)
                         if (howToInputDialog.isClosed) {
                             howToInput2Dialog.updateAndDraw(hud.batch)
+                            if (!howToInput2Dialog.isClosed) {
+                                hud.batch.managed {
+                                    blink(it, assetManager.texture(Assets.Names.ARROW), 785f, 70f)
+                                }
+                            }
                         }
                     }
                 }
             }
             if (somethingWentWrongDialog.isClosed) {
                 howToFixDialog.updateAndDraw(hud.batch)
+                if (!howToFixDialog.isClosed) {
+                    hud.batch.managed {
+                        blink(it, assetManager.texture(Assets.Names.ARROW), 560f, 75f)
+                    }
+                }
             }
         }
     }
@@ -137,10 +169,16 @@ val afterPlot = AfterBarrier(3f)
 val plotterTutorial = {
     val currentTaskId: Int by IOC
     val hud: Stage by IOC
+    val assetManager: AssetManager by IOC
     when (currentTaskId) {
         0 -> {
             afterPlot.invoke {
                 somethingWentWrongDialog.updateAndDraw(hud.batch)
+                if (!somethingWentWrongDialog.isClosed) {
+                    hud.batch.managed {
+                        blink(it, assetManager.texture(Assets.Names.ARROW), 785f, 70f)
+                    }
+                }
             }
         }
     }

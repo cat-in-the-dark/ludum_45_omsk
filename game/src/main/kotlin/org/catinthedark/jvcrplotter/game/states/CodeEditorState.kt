@@ -7,15 +7,11 @@ import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.NinePatch
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.scenes.scene2d.Stage
 import org.catinthedark.jvcrplotter.game.*
 import org.catinthedark.jvcrplotter.game.Assets.Names.FONT_BIG_GREEN
 import org.catinthedark.jvcrplotter.game.editor.Editor
-import org.catinthedark.jvcrplotter.game.ui.Button
-import org.catinthedark.jvcrplotter.game.ui.ButtonPanel
-import org.catinthedark.jvcrplotter.game.ui.CompositeNinePatchButton
-import org.catinthedark.jvcrplotter.game.ui.EditorRender
+import org.catinthedark.jvcrplotter.game.ui.*
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.atOrFail
 import org.catinthedark.jvcrplotter.lib.managed
@@ -28,6 +24,7 @@ class CodeEditorState : IState {
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
     private val inputProcessor = Gdx.input.inputProcessor
     private lateinit var editor: Editor
+    private var showHelp: Boolean = false
     private val cursorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.CURSOR_FRAME), 6, 6, 6, 6) }
     private val errorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.ERROR_FRAME), 6, 6, 6, 6) }
     private val buttonPanel = ButtonPanel { instruction: String, update: Boolean ->
@@ -48,7 +45,10 @@ class CodeEditorState : IState {
             }
         }
     }
-    private val backBtn = Button(1185,580,1255,655, onClick = {
+    private val helpButton = CompositeButton(665, 80, Assets.Names.BUTTON, "?", {
+        showHelp = !showHelp
+    })
+    private val backBtn = Button(1185, 580, 1255, 655, onClick = {
         val prevState = IOC.get("previousState")
         if (prevState != null) {
             IOC.put("state", prevState)
@@ -137,6 +137,8 @@ class CodeEditorState : IState {
         backBtn.update()
         compileButton.update()
         compileButton.draw(hud.batch)
+        helpButton.update()
+        helpButton.draw(hud.batch)
 
         when {
             Gdx.input.isKeyJustPressed(Input.Keys.UP) -> editor.moveCursorUp()
@@ -148,7 +150,19 @@ class CodeEditorState : IState {
             Gdx.input.isKeyJustPressed(Input.Keys.FORWARD_DEL) -> editor.deleteLine()
         }
 
-        renderEditorText(editor)
+        if (showHelp) {
+            renderHelp()
+        } else {
+            renderEditorText(editor)
+        }
+    }
+
+    private fun renderHelp() {
+        val initX = 100f
+        val initY = Const.Screen.HEIGHT.toFloat() - 75f
+        hud.batch.managed {
+            am.font(FONT_BIG_GREEN).draw(it, quickHelpText, initX, initY)
+        }
     }
 
     private fun renderEditorText(editor: Editor) {
