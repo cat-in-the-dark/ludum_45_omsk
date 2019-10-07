@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import org.catinthedark.jvcrplotter.game.ui.HelperDialog
+import org.catinthedark.jvcrplotter.lib.AfterBarrier
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.managed
 
@@ -55,18 +56,55 @@ private val thisIsControllerDialog = HelperDialog(
 )
 
 private val thisIsCodeDialog = HelperDialog(
-    500, 400, 530, 300,
+    290, 300, 530, 300,
     "Here is the program.\n" +
         "Press [RED]arrow keys[] to navigate\n" +
         "through the code"
 )
 
-private val howToCodeDialog = HelperDialog(
-    500, 400, 520, 300,
+private val howToNavigateCodeDialog = HelperDialog(
+    290, 300, 530, 300,
     "Press [RED]enter[] to add new line,\n" +
         "[RED]del[] to remove a line\n" +
         "and [RED]backspace[] to erase a\n" +
         "symbol under the cursor"
+)
+
+private val howToInputDialog = HelperDialog(
+    620, 313, 530, 300,
+    "Down here are our controls\n" +
+        "for entering instructions\n" +
+        "and a large пуск button\n" +
+        "for launching the code"
+)
+
+private val howToInput2Dialog = HelperDialog(
+    290, 300, 530, 300,
+    "Here we already have some\n" +
+        "code. Let's see what it does.\n" +
+        "Press [RED]пуск[] to start execution",
+    States.PLOTTING_SCREEN
+)
+
+private val somethingWentWrongDialog = HelperDialog(
+    400, 450, 490, 250,
+    "Hmm.. Something is wrong\n" +
+        "See that last pixel?\n" +
+        "Press [RED]прервать[] button\n" +
+        "to go back to editing",
+    States.CODE_EDITOR_SCREEN
+)
+
+private val howToFixDialog = HelperDialog(
+    290, 300, 530, 120,
+    "Can you fix this code?"
+)
+
+private val wellDoneDialog = HelperDialog(
+    700, 270, 480, 300,
+    "Well done, comrade!\n" +
+        "You have a new assignment\n" +
+        "Check it here"
 )
 
 val codeEditorTutorial = {
@@ -78,15 +116,34 @@ val codeEditorTutorial = {
             if (thisIsControllerDialog.isClosed) {
                 thisIsCodeDialog.updateAndDraw(hud.batch)
                 if (thisIsCodeDialog.isClosed) {
-                    howToCodeDialog.updateAndDraw(hud.batch)
+                    howToNavigateCodeDialog.updateAndDraw(hud.batch)
+                    if (howToNavigateCodeDialog.isClosed) {
+                        howToInputDialog.updateAndDraw(hud.batch)
+                        if (howToInputDialog.isClosed) {
+                            howToInput2Dialog.updateAndDraw(hud.batch)
+                        }
+                    }
                 }
+            }
+            if (somethingWentWrongDialog.isClosed) {
+                howToFixDialog.updateAndDraw(hud.batch)
             }
         }
     }
 }
 
-val plotterTutorial = {
+val afterPlot = AfterBarrier(3f)
 
+val plotterTutorial = {
+    val currentTaskId: Int by IOC
+    val hud: Stage by IOC
+    when (currentTaskId) {
+        0 -> {
+            afterPlot.invoke {
+                somethingWentWrongDialog.updateAndDraw(hud.batch)
+            }
+        }
+    }
 }
 
 val taskTutorial = {
@@ -124,6 +181,14 @@ val workspaceTutorial = {
                     hud.batch.managed {
                         blink(it, assetManager.texture(Assets.Names.ARROW), 350f, 250f)
                     }
+                }
+            }
+        }
+        1 -> {
+            wellDoneDialog.updateAndDraw(hud.batch)
+            if (!wellDoneDialog.isClosed) {
+                hud.batch.managed {
+                    blink(it, assetManager.texture(Assets.Names.ARROW), 1030f, 350f)
                 }
             }
         }

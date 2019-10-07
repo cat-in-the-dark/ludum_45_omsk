@@ -14,18 +14,13 @@ class StartNewGameState : IState {
             IOC.put("state", States.TUTORIAL_STATE)
             val editor = Editor(
                 mutableListOf(
-                    mutableListOf("MOV", "X", "1"),
-                    mutableListOf("MOV", "Y", "1"),
                     mutableListOf("INT", "42", ""),
+                    mutableListOf("MOV", "X", "0"),
+                    mutableListOf("MOV", "Y", "0"),
                     mutableListOf("INT", "44", ""),
                     mutableListOf("INT", "43", ""),
                     mutableListOf("MOV", "X", "30"),
-                    mutableListOf("INT", "44", ""),
                     mutableListOf("MOV", "Y", "30"),
-                    mutableListOf("INT", "44", ""),
-                    mutableListOf("MOV", "X", "1"),
-                    mutableListOf("INT", "44", ""),
-                    mutableListOf("MOV", "Y", "1"),
                     mutableListOf("INT", "44", "")
                 )
             )
