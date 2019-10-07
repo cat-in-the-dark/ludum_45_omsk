@@ -9,7 +9,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.FitViewport
 import org.catinthedark.jvcrplotter.game.states.*
-import org.catinthedark.jvcrplotter.lib.*
+import org.catinthedark.jvcrplotter.lib.Deffer
+import org.catinthedark.jvcrplotter.lib.DefferImpl
+import org.catinthedark.jvcrplotter.lib.IOC
+import org.catinthedark.jvcrplotter.lib.atOrFail
 import org.catinthedark.jvcrplotter.lib.states.StateMachine
 
 class JVCRPlotter : Game() {
@@ -56,14 +59,14 @@ class JVCRPlotter : Game() {
                 States.WORKSPACE_SCREEN,
                 States.SUCCESS_SCREEN
             ) {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-                    IOC.put("state", States.TITLE_SCREEN)
-                    IOC.put("tutorialShown", false)
-                }
+                IOC.atOrFail<InputAdapterHolder>("inputs").update()
+            }
+            putMixins(
+                States.TASK_SCREEN
+            ) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.ALT_LEFT)) {
                     IOC.put("state", States.SUCCESS_SCREEN)
                 }
-                IOC.atOrFail<InputAdapterHolder>("inputs").update()
             }
             putMixins(
                 States.CODE_EDITOR_SCREEN,
@@ -74,7 +77,7 @@ class JVCRPlotter : Game() {
                 States.TASK_SCREEN,
                 States.WORKSPACE_SCREEN
             ) {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                     val prevState = IOC.get("previousState")
                     if (prevState != null) {
                         IOC.put("state", prevState)

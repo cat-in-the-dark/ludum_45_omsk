@@ -22,6 +22,7 @@ class TitleScreenState : IState {
 
     override fun onActivate() {
         currentTime = 0f
+        IOC.put("tutorialShown", false)
     }
 
     override fun onUpdate() {
