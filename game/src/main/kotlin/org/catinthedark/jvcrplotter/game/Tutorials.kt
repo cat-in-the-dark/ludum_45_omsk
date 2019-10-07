@@ -105,9 +105,8 @@ private val howToInput2Dialog = HelperDialog(
 )
 
 private val somethingWentWrongDialog = HelperDialog(
-    400, 450, 490, 250,
+    400, 450, 490, 230,
     "Hmm.. Something is wrong.\n" +
-        "See that last pixel?\n" +
         "Press [RED]прервать[] button\n" +
         "to go back to editing",
     States.CODE_EDITOR_SCREEN
@@ -125,7 +124,16 @@ private val wellDoneDialog = HelperDialog(
     600, 270, 520, 300,
     "Well done, comrade!\n" +
         "You have a new assignment\n" +
-        "Check it here"
+        "Check it here",
+    States.TASK_SCREEN
+)
+
+private val useKeyboardDialog = HelperDialog(
+    400, 300, 550, 300,
+    "You can also use a keyboard.\n" +
+        "Press [RED]M[] for MOV, [RED]I[] for INT\n" +
+        "[RED]0[] .. [RED]9[] for digits and\n" +
+        "[RED]A[], [RED]B[], [RED]X[] or [RED]Y[] for the registers"
 )
 
 val codeEditorTutorial = {
@@ -160,6 +168,9 @@ val codeEditorTutorial = {
                     }
                 }
             }
+        }
+        1 -> {
+            useKeyboardDialog.updateAndDraw(hud.batch)
         }
     }
 }

@@ -14,8 +14,8 @@ class StartNewGameState : IState {
                 mutableListOf("MOV", "Y", "0"),
                 mutableListOf("INT", "44", ""),
                 mutableListOf("INT", "43", ""),
-                mutableListOf("MOV", "X", "30"),
-                mutableListOf("MOV", "Y", "30"),
+                mutableListOf("MOV", "X", "15"),
+                mutableListOf("MOV", "Y", "15"),
                 mutableListOf("INT", "44", "")
             )
         )
