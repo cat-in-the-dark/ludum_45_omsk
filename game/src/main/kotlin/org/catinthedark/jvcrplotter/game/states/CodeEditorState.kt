@@ -68,7 +68,7 @@ class CodeEditorState : IState {
 
     private val compileButton = CompositeNinePatchButton(
         910, 60, 220, 50, Assets.Names.BUTTON_RED,
-        Rectangle(20f, 15f, 20f, 15f),
+        Const.UI.ninePatchButtonRect,
         "ПУСК", {
             try {
                 IOC.put("instructions", editor.toInstructions())

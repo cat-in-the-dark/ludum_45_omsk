@@ -133,6 +133,8 @@ object Assets {
         val CURSOR_FRAME = "textures/frame_9.png"
         val ERROR_FRAME = "textures/frame_red_9.png"
         val LINE_FRAME = "textures/frame_line_9.png"
+        val HELP_FRAME = "textures/help_frame_9.png"
+        val ARROW = "textures/arrow.png"
         val WORKSPACE = "textures/workspace.png"
         val EDITOR = "textures/editor.png"
         val TASK = "textures/task.png"
@@ -155,6 +157,8 @@ object Assets {
             CURSOR_FRAME,
             ERROR_FRAME,
             LINE_FRAME,
+            HELP_FRAME,
+            ARROW,
             WORKSPACE,
             ICON_MOVE,
             ICON_SET_PLOT,

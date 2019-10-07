@@ -32,8 +32,10 @@ class TitleScreenState : IState {
             currentTime += Gdx.graphics.deltaTime
 
             if ((currentTime * 2).toInt() % 2 == 0) {
+                val font = am.at<BitmapFont>(Assets.Names.FONT_BIG)
+                font.data.markupEnabled = true
                 am.at<BitmapFont>(Assets.Names.FONT_BIG).draw(
-                    b, "Нажмите пробел", 630f, 220f
+                    b, "Press [RED]spacebar[]", 630f, 220f
                 )
             }
         }

@@ -1,6 +1,7 @@
 package org.catinthedark.jvcrplotter.game
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Rectangle
 
 object Const {
     object Screen {
@@ -20,6 +21,7 @@ object Const {
     }
 
     object UI {
+        val ninePatchButtonRect = Rectangle(20f, 15f, 20f, 15f)
         const val buttonHeight = 39
         const val buttonWidth = 70
         const val maxLinesOnScreen = 14

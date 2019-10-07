@@ -48,6 +48,30 @@ class JVCRPlotter : Game() {
                 States.WORKSPACE_SCREEN to WorkspaceScreenState(),
                 States.SUCCESS_SCREEN to SuccessScreenState()
             )
+            // handle ESC before tutorial mixins to properly handle dialog auto-closing on target state change
+            putMixins(
+                States.CODE_EDITOR_SCREEN,
+                States.PLOTTING_SCREEN,
+                States.START_NEW_GAME_STATE,
+                States.TUTORIAL_STATE,
+                States.MAN_PAGE_SCREEN,
+                States.TASK_SCREEN,
+                States.WORKSPACE_SCREEN
+            ) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                    val prevState = IOC.get("previousState")
+                    if (prevState != null) {
+                        IOC.put("state", prevState)
+                    }
+                }
+            }
+
+            putMixin(States.CODE_EDITOR_SCREEN, codeEditorTutorial)
+            putMixin(States.PLOTTING_SCREEN, plotterTutorial)
+            putMixin(States.WORKSPACE_SCREEN, workspaceTutorial)
+            putMixin(States.TASK_SCREEN, taskTutorial)
+
+            // handle everything before inputs to make buttons work in mixins
             putMixins(
                 States.SPLASH_SCREEN,
                 States.TITLE_SCREEN,
@@ -66,22 +90,6 @@ class JVCRPlotter : Game() {
             ) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.ALT_LEFT)) {
                     IOC.put("state", States.SUCCESS_SCREEN)
-                }
-            }
-            putMixins(
-                States.CODE_EDITOR_SCREEN,
-                States.PLOTTING_SCREEN,
-                States.START_NEW_GAME_STATE,
-                States.TUTORIAL_STATE,
-                States.MAN_PAGE_SCREEN,
-                States.TASK_SCREEN,
-                States.WORKSPACE_SCREEN
-            ) {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-                    val prevState = IOC.get("previousState")
-                    if (prevState != null) {
-                        IOC.put("state", prevState)
-                    }
                 }
             }
         }

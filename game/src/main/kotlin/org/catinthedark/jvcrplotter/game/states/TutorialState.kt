@@ -33,6 +33,7 @@ class TutorialState : IState {
 
     override fun onActivate() {
         tutIdx = 0
+        IOC.put("state", States.WORKSPACE_SCREEN)
     }
 
     override fun onUpdate() {
