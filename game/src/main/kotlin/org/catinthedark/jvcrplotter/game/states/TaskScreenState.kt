@@ -2,10 +2,12 @@ package org.catinthedark.jvcrplotter.game.states
 
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
-import org.catinthedark.jvcrplotter.game.*
+import org.catinthedark.jvcrplotter.game.Assets
+import org.catinthedark.jvcrplotter.game.States
+import org.catinthedark.jvcrplotter.game.Tasks
+import org.catinthedark.jvcrplotter.game.font
 import org.catinthedark.jvcrplotter.game.plotter.createPlot
 import org.catinthedark.jvcrplotter.game.ui.Button
 import org.catinthedark.jvcrplotter.lib.IOC
@@ -17,7 +19,7 @@ class TaskScreenState : IState {
     private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
 
-    private val backBtn = Button(800,620,900,650, onClick = {
+    private val backBtn = Button(800, 620, 900, 650, onClick = {
         IOC.put("state", IOC.get("previousState") ?: States.WORKSPACE_SCREEN)
     })
     private val font by lazy { am.font(Assets.Names.FONT_BIG_GREEN) }
@@ -25,7 +27,7 @@ class TaskScreenState : IState {
 
     override fun onActivate() {
         val taskId: Int = IOC.atOrFail("currentTaskId")
-        val task = Tasks.tasks[taskId]
+        val task = Tasks.createTask(am, taskId)
         tex = createPlot(task, background = Color.DARK_GRAY)
     }
 
@@ -33,7 +35,7 @@ class TaskScreenState : IState {
         backBtn.update()
 
         hud.batch.managed {
-            it.draw(tex, 320f, 620f-352f, 352f, 352f)
+            it.draw(tex, 320f, 620f - 352f, 352f, 352f)
             font.draw(it, "ТЕХНИЧЕСКОЕ ЗАДАНИЕ", 320f, 650f)
             font.draw(it, "НАЗАД", 800f, 650f)
         }

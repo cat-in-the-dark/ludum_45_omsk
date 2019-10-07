@@ -113,7 +113,14 @@ object Assets {
         val FONT_MEDIUM_WHITE = "font_medium_white.ttf"
         val FONT_BIG_SERIF = "font_big_serif.ttf"
         val FONT_MEDIUM_MONOSPACE_BLACK = "font_medium_monospace_black.ttf"
-
+        val TASK_1 = "tasks/task1.png"
+        val TASK_2 = "tasks/task2.png"
+        val TASK_3 = "tasks/task3.png"
+        val TASK_4 = "tasks/task4.png"
+        val TASK_5 = "tasks/task5.png"
+        val TASK_6 = "tasks/task6.png"
+        val TASK_7 = "tasks/task7.png"
+        val TASK_8 = "tasks/task8.png"
         val LOGO = "textures/title.png"
         val TITLE = "textures/art.png"
         val MONIK = "textures/monik.png"
@@ -161,7 +168,15 @@ object Assets {
             TUTORIAL3,
             TUTORIAL3_5,
             TUTORIAL4,
-            TUTORIAL5
+            TUTORIAL5,
+            TASK_1,
+            TASK_2,
+            TASK_3,
+            TASK_4,
+            TASK_5,
+            TASK_6,
+            TASK_7,
+            TASK_8
         )
     }
 }

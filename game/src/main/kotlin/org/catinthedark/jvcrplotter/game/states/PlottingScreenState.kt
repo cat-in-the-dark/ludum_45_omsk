@@ -118,7 +118,7 @@ class PlottingScreenState : IState {
             if (!ok) return
 
             val taskId: Int = IOC.atOrFail("currentTaskId")
-            val task = Tasks.tasks[taskId]
+            val task = Tasks.createTask(am, taskId)
             if (plotState.vram.check(task)) {
                 after.invoke {
                     IOC.put("state", States.SUCCESS_SCREEN)
@@ -158,7 +158,6 @@ class PlottingScreenState : IState {
 
         draw()
     }
-
 
     private fun renderEditorText(editor: Editor) {
         editorRender.render(

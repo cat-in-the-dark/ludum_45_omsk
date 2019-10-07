@@ -29,7 +29,7 @@ class SuccessScreenState: IState {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            val nextTaskId = (IOC.atOrFail<Int>("currentTaskId") + 1) % Tasks.tasks.size
+            val nextTaskId = (IOC.atOrFail<Int>("currentTaskId") + 1) % Tasks.taskTextures.size
             IOC.put("currentTaskId", nextTaskId)
             IOC.put("state", States.WORKSPACE_SCREEN)
         }
