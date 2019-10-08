@@ -128,6 +128,7 @@ class PlottingScreenState : IState {
                         "instructionsCount", IOC.atOrFail<Int>("instructionsCount") +
                             state.instructions.size
                     )
+                    IOC.put("solutionInstructions", state.instructions.size)
                     IOC.put("state", States.SUCCESS_SCREEN)
                 }
             } else {
