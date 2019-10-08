@@ -137,40 +137,43 @@ private val useKeyboardDialog = HelperDialog(
 )
 
 val codeEditorTutorial = {
+    val showTutorial: Boolean by IOC
     val currentTaskId: Int by IOC
     val hud: Stage by IOC
     val assetManager: AssetManager by IOC
-    when (currentTaskId) {
-        0 -> {
-            thisIsControllerDialog.updateAndDraw(hud.batch)
-            if (thisIsControllerDialog.isClosed) {
-                thisIsCodeDialog.updateAndDraw(hud.batch)
-                if (thisIsCodeDialog.isClosed) {
-                    howToNavigateCodeDialog.updateAndDraw(hud.batch)
-                    if (howToNavigateCodeDialog.isClosed) {
-                        howToInputDialog.updateAndDraw(hud.batch)
-                        if (howToInputDialog.isClosed) {
-                            howToInput2Dialog.updateAndDraw(hud.batch)
-                            if (!howToInput2Dialog.isClosed) {
-                                hud.batch.managed {
-                                    blink(it, assetManager.texture(Assets.Names.ARROW), 785f, 70f)
+    if (showTutorial) {
+        when (currentTaskId) {
+            0 -> {
+                thisIsControllerDialog.updateAndDraw(hud.batch)
+                if (thisIsControllerDialog.isClosed) {
+                    thisIsCodeDialog.updateAndDraw(hud.batch)
+                    if (thisIsCodeDialog.isClosed) {
+                        howToNavigateCodeDialog.updateAndDraw(hud.batch)
+                        if (howToNavigateCodeDialog.isClosed) {
+                            howToInputDialog.updateAndDraw(hud.batch)
+                            if (howToInputDialog.isClosed) {
+                                howToInput2Dialog.updateAndDraw(hud.batch)
+                                if (!howToInput2Dialog.isClosed) {
+                                    hud.batch.managed {
+                                        blink(it, assetManager.texture(Assets.Names.ARROW), 785f, 70f)
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
-            if (somethingWentWrongDialog.isClosed) {
-                howToFixDialog.updateAndDraw(hud.batch)
-                if (!howToFixDialog.isClosed) {
-                    hud.batch.managed {
-                        blink(it, assetManager.texture(Assets.Names.ARROW), 560f, 75f)
+                if (somethingWentWrongDialog.isClosed) {
+                    howToFixDialog.updateAndDraw(hud.batch)
+                    if (!howToFixDialog.isClosed) {
+                        hud.batch.managed {
+                            blink(it, assetManager.texture(Assets.Names.ARROW), 560f, 75f)
+                        }
                     }
                 }
             }
-        }
-        1 -> {
-            useKeyboardDialog.updateAndDraw(hud.batch)
+            1 -> {
+                useKeyboardDialog.updateAndDraw(hud.batch)
+            }
         }
     }
 }
@@ -178,16 +181,19 @@ val codeEditorTutorial = {
 val afterPlot = AfterBarrier(3f)
 
 val plotterTutorial = {
+    val showTutorial: Boolean by IOC
     val currentTaskId: Int by IOC
     val hud: Stage by IOC
     val assetManager: AssetManager by IOC
-    when (currentTaskId) {
-        0 -> {
-            afterPlot.invoke {
-                somethingWentWrongDialog.updateAndDraw(hud.batch)
-                if (!somethingWentWrongDialog.isClosed) {
-                    hud.batch.managed {
-                        blink(it, assetManager.texture(Assets.Names.ARROW), 785f, 70f)
+    if (showTutorial) {
+        when (currentTaskId) {
+            0 -> {
+                afterPlot.invoke {
+                    somethingWentWrongDialog.updateAndDraw(hud.batch)
+                    if (!somethingWentWrongDialog.isClosed) {
+                        hud.batch.managed {
+                            blink(it, assetManager.texture(Assets.Names.ARROW), 785f, 70f)
+                        }
                     }
                 }
             }
@@ -196,48 +202,54 @@ val plotterTutorial = {
 }
 
 val taskTutorial = {
+    val showTutorial: Boolean by IOC
     val currentTaskId: Int by IOC
     val hud: Stage by IOC
-    when (currentTaskId) {
-        0 -> {
-            assignmentDialog.updateAndDraw(hud.batch)
+    if (showTutorial) {
+        when (currentTaskId) {
+            0 -> {
+                assignmentDialog.updateAndDraw(hud.batch)
+            }
         }
     }
 }
 
 val workspaceTutorial = {
+    val showTutorial: Boolean by IOC
     val currentTaskId: Int by IOC
     val hud: Stage by IOC
     val assetManager: AssetManager by IOC
     blinkTs += Gdx.graphics.deltaTime
-    when (currentTaskId) {
-        0 -> {
-            welcomeDialog.updateAndDraw(hud.batch)
-            if (welcomeDialog.isClosed) {
-                goalDialog.updateAndDraw(hud.batch)
-                if (goalDialog.isClosed) {
-                    clickAssignmentDialog.updateAndDraw(hud.batch)
-                    if (!clickAssignmentDialog.isClosed) {
+    if (showTutorial) {
+        when (currentTaskId) {
+            0 -> {
+                welcomeDialog.updateAndDraw(hud.batch)
+                if (welcomeDialog.isClosed) {
+                    goalDialog.updateAndDraw(hud.batch)
+                    if (goalDialog.isClosed) {
+                        clickAssignmentDialog.updateAndDraw(hud.batch)
+                        if (!clickAssignmentDialog.isClosed) {
+                            hud.batch.managed {
+                                blink(it, assetManager.texture(Assets.Names.ARROW), 1030f, 350f)
+                            }
+                        }
+                    }
+                }
+                if (assignmentDialog.isClosed) {
+                    clickCodeEditorDialog.updateAndDraw(hud.batch)
+                    if (!clickCodeEditorDialog.isClosed) {
                         hud.batch.managed {
-                            blink(it, assetManager.texture(Assets.Names.ARROW), 1030f, 350f)
+                            blink(it, assetManager.texture(Assets.Names.ARROW), 350f, 250f)
                         }
                     }
                 }
             }
-            if (assignmentDialog.isClosed) {
-                clickCodeEditorDialog.updateAndDraw(hud.batch)
-                if (!clickCodeEditorDialog.isClosed) {
+            1 -> {
+                wellDoneDialog.updateAndDraw(hud.batch)
+                if (!wellDoneDialog.isClosed) {
                     hud.batch.managed {
-                        blink(it, assetManager.texture(Assets.Names.ARROW), 350f, 250f)
+                        blink(it, assetManager.texture(Assets.Names.ARROW), 1030f, 350f)
                     }
-                }
-            }
-        }
-        1 -> {
-            wellDoneDialog.updateAndDraw(hud.batch)
-            if (!wellDoneDialog.isClosed) {
-                hud.batch.managed {
-                    blink(it, assetManager.texture(Assets.Names.ARROW), 1030f, 350f)
                 }
             }
         }

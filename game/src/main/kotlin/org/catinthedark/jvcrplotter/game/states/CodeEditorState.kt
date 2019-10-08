@@ -84,13 +84,13 @@ class CodeEditorState : IState {
         editor = IOC.atOrFail("editor")
         IOC.put("previousState", States.WORKSPACE_SCREEN)
         logger.info("game state activated")
-        Gdx.input.inputProcessor = EditorInputAdapter(editor, inputProcessor) {
+        Gdx.input.inputProcessor = FusedInputAdapter(inputProcessor) {
             compileError = false
+            editor.onKeyTyped(it)
         }
     }
 
-    class EditorInputAdapter(
-        private val editor: Editor,
+    class FusedInputAdapter(
         private val inputProcessor: InputProcessor,
         private val onKeyTyped: (character: Char) -> Unit = {}
     ) : InputAdapter() {
@@ -99,28 +99,7 @@ class CodeEditorState : IState {
         }
 
         override fun keyTyped(character: Char): Boolean {
-            val posX = editor.getCursorPosition().first
             onKeyTyped(character)
-            if (posX != 0) {
-                if (character in '0'..'9' || (character == '-')) {
-                    editor.appendNumberUnderCursor(character)
-                }
-                if (character in listOf('a', 'b', 'x', 'y')) {
-                    editor.setSymbolUnderCursor(character.toString().toUpperCase())
-                    editor.moveCursorRight()
-                }
-            } else {
-                when (character) {
-                    'i' -> {
-                        editor.setSymbolUnderCursor("INT")
-                        editor.moveCursorRight()
-                    }
-                    'm' -> {
-                        editor.setSymbolUnderCursor("MOV")
-                        editor.moveCursorRight()
-                    }
-                }
-            }
             return inputProcessor.keyTyped(character)
         }
     }

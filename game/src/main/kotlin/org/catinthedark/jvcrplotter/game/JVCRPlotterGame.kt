@@ -45,6 +45,7 @@ class JVCRPlotter : Game() {
                 States.MAN_PAGE_SCREEN to ManPageScreenState(),
                 States.TASK_SCREEN to TaskScreenState(),
                 States.WORKSPACE_SCREEN to WorkspaceScreenState(),
+                States.WIN_SCREEN to WinScreenState(),
                 States.SUCCESS_SCREEN to SuccessScreenState()
             )
             // handle ESC before tutorial mixins to properly handle dialog auto-closing on target state change
@@ -79,7 +80,8 @@ class JVCRPlotter : Game() {
                 States.MAN_PAGE_SCREEN,
                 States.TASK_SCREEN,
                 States.WORKSPACE_SCREEN,
-                States.SUCCESS_SCREEN
+                States.SUCCESS_SCREEN,
+                States.WIN_SCREEN
             ) {
                 IOC.atOrFail<InputAdapterHolder>("inputs").update()
             }

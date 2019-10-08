@@ -228,4 +228,27 @@ class Editor(private val widthInBlocks: Int) {
             }
         }
     }
+
+    fun onKeyTyped(character: Char) {
+        if (cursorX != 0) {
+            if (character in '0'..'9' || (character == '-')) {
+                appendNumberUnderCursor(character)
+            }
+            if (character in listOf('a', 'A', 'b', 'B', 'x', 'X', 'y', 'Y')) {
+                setSymbolUnderCursor(character.toString().toUpperCase())
+                moveCursorRight()
+            }
+        } else {
+            when (character) {
+                in listOf('i', 'I') -> {
+                    setSymbolUnderCursor("INT")
+                    moveCursorRight()
+                }
+                in listOf('m', 'M') -> {
+                    setSymbolUnderCursor("MOV")
+                    moveCursorRight()
+                }
+            }
+        }
+    }
 }

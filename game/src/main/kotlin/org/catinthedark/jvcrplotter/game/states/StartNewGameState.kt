@@ -21,6 +21,7 @@ class StartNewGameState : IState {
         )
         IOC.put("editor", editor)
         IOC.put("currentTaskId", 0)
+        IOC.put("instructionsCount", 0)
         IOC.put("state", States.WORKSPACE_SCREEN)
     }
 

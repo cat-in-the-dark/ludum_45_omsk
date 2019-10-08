@@ -79,6 +79,8 @@ class PlottingScreenState : IState {
 
     override fun onActivate() {
         logger.info("onActivate")
+        runError = false
+        errorMessage = null
         after = AfterBarrier(1f)
         instructions = IOC.atOrFail("instructions")
         editor = IOC.atOrFail("editor")
@@ -112,7 +114,8 @@ class PlottingScreenState : IState {
                 running = false
                 ok = false
                 logger.error("FAIL", e)
-                // TODO: Show error for the user???
+                runError = true
+                errorMessage = "ЕГГОГ\n" + e.message
             }
         } else {
             if (!ok) return
@@ -121,6 +124,10 @@ class PlottingScreenState : IState {
             val task = Tasks.createTask(am, taskId)
             if (plotState.vram.check(task)) {
                 after.invoke {
+                    IOC.put(
+                        "instructionsCount", IOC.atOrFail<Int>("instructionsCount") +
+                            state.instructions.size
+                    )
                     IOC.put("state", States.SUCCESS_SCREEN)
                 }
             } else {
@@ -151,6 +158,10 @@ class PlottingScreenState : IState {
         hud.batch.managed {
             it.draw(am.at<Texture>(Assets.Names.MONIK), 0f, 0f)
             it.draw(createPlot(plotState.vram), 700f, 310f, 352f, 352f)
+            if (!runError) {
+                am.font(Assets.Names.FONT_BIG_GREEN)
+                    .draw(it, "Instructions: ${state.instructions.size}", 100f, 120f)
+            }
         }
 
         renderEditorText(editor)
