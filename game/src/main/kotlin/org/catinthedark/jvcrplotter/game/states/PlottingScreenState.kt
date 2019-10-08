@@ -40,7 +40,7 @@ class PlottingScreenState : IState {
     private var errorMessage: String? = ""
     private lateinit var editor: Editor
     private val cursorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.LINE_FRAME), 6, 6, 6, 6) }
-    private val errorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.ERROR_FRAME), 6, 6, 6, 6) }
+    private val errorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.ERROR_FRAME), 9, 9, 9, 9) }
     private val font by lazy { am.font(Assets.Names.FONT_BIG_GREEN) }
     private val editorRender: EditorRender by lazy {
         EditorRender(

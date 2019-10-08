@@ -132,6 +132,7 @@ private val useKeyboardDialog = HelperDialog(
     400, 300, 550, 300,
     "You can also use a keyboard.\n" +
         "Press [RED]M[] for MOV, [RED]I[] for INT\n" +
+        "[RED]A[] for ADD, [RED]C[] for CMP\n" +
         "[RED]0[] .. [RED]9[] for digits and\n" +
         "[RED]A[], [RED]B[], [RED]X[] or [RED]Y[] for the registers"
 )

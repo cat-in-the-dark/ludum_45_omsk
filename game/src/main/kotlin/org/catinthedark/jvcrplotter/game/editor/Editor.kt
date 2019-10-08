@@ -248,6 +248,14 @@ class Editor(private val widthInBlocks: Int) {
                     setSymbolUnderCursor("MOV")
                     moveCursorRight()
                 }
+                in listOf('c', 'C') -> {
+                    setSymbolUnderCursor("CMP")
+                    moveCursorRight()
+                }
+                in listOf('a', 'A') -> {
+                    setSymbolUnderCursor("ADD")
+                    moveCursorRight()
+                }
             }
         }
     }

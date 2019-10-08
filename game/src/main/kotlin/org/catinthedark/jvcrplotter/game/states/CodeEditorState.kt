@@ -25,8 +25,8 @@ class CodeEditorState : IState {
     private val inputProcessor = Gdx.input.inputProcessor
     private lateinit var editor: Editor
     private var showHelp: Boolean = false
-    private val cursorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.CURSOR_FRAME), 6, 6, 6, 6) }
-    private val errorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.ERROR_FRAME), 6, 6, 6, 6) }
+    private val cursorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.CURSOR_FRAME), 9, 9, 9, 9) }
+    private val errorFrame: NinePatch by lazy { NinePatch(am.texture(Assets.Names.ERROR_FRAME), 9, 9, 9, 9) }
     private val buttonPanel = ButtonPanel { instruction: String, update: Boolean ->
         when {
             update -> editor.appendNumberUnderCursor(instruction[0])
